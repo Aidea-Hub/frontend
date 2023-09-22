@@ -25,8 +25,8 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { useSearchParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
-import ImageCard from '../../components/ImageCard'
-import PreviewImage from '../../components/PreviewImage'
+import IdeaCard from '../../components/IdeaCard'
+import PreviewIdea from '../../components/PreviewIdea'
 import PulsingDot from '../../components/PulsingDot'
 import SelectedTagList from '../../components/SelectedTagList'
 import firebase from '../../config/firebase'
@@ -36,18 +36,18 @@ const PAGE_LIMIT = 15
 const db = getFirestore(firebase)
 const analytics = getAnalytics(firebase)
 
-export const ViewSearchedImagesSortOptions = [
+export const ViewSearchedIdeasSortOptions = [
   { name: 'Latest Created', value: 'created_at-desc' },
   { name: 'Earliest Created', value: 'created_at-asc' },
   { name: 'Highest Votes', value: 'votes-desc' },
   // { name: 'Lowest Votes', value: 'votes-asc' },
 ]
 
-const ViewSearchedImages = () => {
+const ViewSearchedIdeas = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedPost, setSelectedPost] = useState(null)
   const [lastVisible, setLastVisible] = useState<DocumentData>()
-  const [images, setImages] = useState<any[]>([])
+  const [ideas, setIdeas] = useState<any[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const [isLoading, setLoading] = useState(true)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -64,7 +64,7 @@ const ViewSearchedImages = () => {
   }
 
   const queryBuilder = (isFirst = false) => {
-    let q = query(collection(db, 'images'))
+    let q = query(collection(db, 'ideas'))
     console.log('selectedTags', selectedTags)
     if (selectedTags) {
       q = query(q, where('tags_string', '==', sortAndJoinTags(selectedTags)))
@@ -80,32 +80,32 @@ const ViewSearchedImages = () => {
     return q
   }
 
-  const getInitialImages = async () => {
-    logEvent(analytics, 'gallery_get_initial_images', {
+  const getInitialIdeas = async () => {
+    logEvent(analytics, 'gallery_get_initial_ideas', {
       sort: gallerySort,
     })
     const q = queryBuilder(true)
     // TODO change to index of last doc
     // TOOD document design changes to likes etc in notesbook or docs
     const querySnapshot = await getDocs(q)
-    const newImages: any[] = []
-    const imagesDocs = querySnapshot.docs
-    imagesDocs.forEach(doc => {
+    const newIdeas: any[] = []
+    const ideasDocs = querySnapshot.docs
+    ideasDocs.forEach(doc => {
       // doc.data() is never undefined for query doc snapshots
-      newImages.push({
+      newIdeas.push({
         id: doc.id,
         ...doc.data(),
       })
     })
-    if (imagesDocs.length > 0) {
-      setLastVisible(imagesDocs[imagesDocs.length - 1])
+    if (ideasDocs.length > 0) {
+      setLastVisible(ideasDocs[ideasDocs.length - 1])
     }
 
-    setHasNextPage(newImages.length == PAGE_LIMIT)
+    setHasNextPage(newIdeas.length == PAGE_LIMIT)
 
-    setImages(newImages)
+    setIdeas(newIdeas)
     setLoading(false)
-    console.log('newImages', newImages)
+    console.log('newIdeas', newIdeas)
   }
 
   const fetchNextPage = async () => {
@@ -114,31 +114,31 @@ const ViewSearchedImages = () => {
     if (lastVisible) {
       const q = queryBuilder()
       const querySnapshot = await getDocs(q)
-      const newImages: any[] = []
-      const imagesDocs = querySnapshot.docs
-      imagesDocs.forEach(doc => {
+      const newIdeas: any[] = []
+      const ideasDocs = querySnapshot.docs
+      ideasDocs.forEach(doc => {
         // doc.data() is never undefined for query doc snapshots
-        newImages.push({
+        newIdeas.push({
           id: doc.id,
           ...doc.data(),
         })
       })
-      if (imagesDocs.length > 0) {
-        setLastVisible(imagesDocs[imagesDocs.length - 1])
+      if (ideasDocs.length > 0) {
+        setLastVisible(ideasDocs[ideasDocs.length - 1])
       }
 
-      setHasNextPage(newImages.length == PAGE_LIMIT)
-      setImages([...images, ...newImages])
-      console.log('newImages', newImages)
+      setHasNextPage(newIdeas.length == PAGE_LIMIT)
+      setIdeas([...ideas, ...newIdeas])
+      console.log('newIdeas', newIdeas)
     }
   }
 
   useEffect(() => {
-    getInitialImages()
+    getInitialIdeas()
   }, [])
 
   useEffect(() => {
-    getInitialImages()
+    getInitialIdeas()
   }, [gallerySort])
 
   return (
@@ -158,7 +158,7 @@ const ViewSearchedImages = () => {
                   Search
                 </Heading>
                 <Text fontSize="lg" fontWeight="semibold" mt={2}>
-                  Find specific generated images and edit them to your liking
+                  Find specific generated ideas and edit them to your liking
                 </Text>
                 <Center mt={4}>
                   {selectedTags && (
@@ -172,10 +172,10 @@ const ViewSearchedImages = () => {
                     />
                   )}
                 </Center>
-                {images.length === 0 && (
+                {ideas.length === 0 && (
                   <Text fontWeight="semibold" mt={50}>
-                    No matching images found. Please try again with a different
-                    combination of tags, or generate them via our Image
+                    No matching ideas found. Please try again with a different
+                    combination of tags, or generate them via our Idea
                     Generator.
                   </Text>
                 )}
@@ -190,13 +190,13 @@ const ViewSearchedImages = () => {
                   spacing={5}
                   mt={6}
                 >
-                  {images.map((post: any) => (
-                    <ImageCard key={post.id} image={post} onImageClick={view} />
+                  {ideas.map((post: any) => (
+                    <IdeaCard key={post.id} idea={post} onIdeaClick={view} />
                   ))}
                 </SimpleGrid>
               </InfiniteScroll>
               {selectedPost && (
-                <PreviewImage
+                <PreviewIdea
                   isOpen={isOpen}
                   onClose={onClose}
                   post={selectedPost}
@@ -210,4 +210,4 @@ const ViewSearchedImages = () => {
   )
 }
 
-export default ViewSearchedImages
+export default ViewSearchedIdeas

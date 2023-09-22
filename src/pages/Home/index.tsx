@@ -52,7 +52,7 @@ export default function Home() {
             </Text>
             <Input></Input>
           </Stack>
-          {/* <ImageGenerator
+          {/* <IdeaGenerator
             tags={tags}
             onClickTag={handleTagAccordianClick}
             requestType={REQUEST_TYPES.GENERATE_IMAGE}

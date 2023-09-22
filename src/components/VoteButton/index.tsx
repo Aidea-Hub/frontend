@@ -13,37 +13,37 @@ import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
 interface VoteButtonProps {
-  imageId: string
+  ideaId: string
   votes?: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  image?: any
+  idea?: any
 }
 
-const VoteButton = ({ imageId, votes, image }: VoteButtonProps) => {
+const VoteButton = ({ ideaId, votes, idea }: VoteButtonProps) => {
   // Vote functionality
   const [user, setUser] = useRecoilState(userAtom)
   const [localVotes, setLocalVotes] = useState(votes)
   const theme = useRecoilValue(themeSelector)
 
   const handleVote = (vote: number) => {
-    console.log('handleVote Clicked', imageId, user.uid)
+    console.log('handleVote Clicked', ideaId, user.uid)
     let changeInVote = 0
-    if (imageId && user.uid) {
+    if (ideaId && user.uid) {
       const newVotes = { ...user.votes }
-      if (user.votes[imageId] && user.votes[imageId] === vote) {
-        delete newVotes[imageId]
+      if (user.votes[ideaId] && user.votes[ideaId] === vote) {
+        delete newVotes[ideaId]
         changeInVote -= vote
       } else {
-        changeInVote += 0 - (newVotes[imageId] || 0) + vote
-        newVotes[imageId] = vote
+        changeInVote += 0 - (newVotes[ideaId] || 0) + vote
+        newVotes[ideaId] = vote
       }
       setUser({
         ...user,
         votes: newVotes,
       })
 
-      authApi.post('/voteImage', {
-        imageId,
+      authApi.post('/voteIdea', {
+        ideaId,
         userId: user.uid,
         vote,
       })
@@ -52,9 +52,9 @@ const VoteButton = ({ imageId, votes, image }: VoteButtonProps) => {
       console.log('localVotes !== undefined', localVotes !== undefined)
       if (localVotes !== undefined) {
         setLocalVotes(localVotes + changeInVote)
-        if (image) {
+        if (idea) {
           // normally bad practice to modify state, but since I do not need re-render, it is fine
-          image.votes = localVotes + changeInVote
+          idea.votes = localVotes + changeInVote
         }
       }
     }
@@ -65,12 +65,12 @@ const VoteButton = ({ imageId, votes, image }: VoteButtonProps) => {
       <Tooltip label="Login to Upvote" isDisabled={user.uid !== ''}>
         <IconButton
           isDisabled={user.uid === ''}
-          colorScheme={user.votes[imageId] === 1 ? `${theme}` : 'black'}
+          colorScheme={user.votes[ideaId] === 1 ? `${theme}` : 'black'}
           aria-label="upvote"
           variant="ghost"
           onClick={() => handleVote(1)}
           icon={
-            user.votes[imageId] === 1 ? (
+            user.votes[ideaId] === 1 ? (
               <IconArrowBigUpFilled size={20} stroke={1.5} />
             ) : (
               // eslint-disable-next-line react/jsx-no-undef
@@ -82,12 +82,12 @@ const VoteButton = ({ imageId, votes, image }: VoteButtonProps) => {
       <Tooltip label="Login to Downvote" isDisabled={user.uid !== ''}>
         <IconButton
           isDisabled={user.uid === ''}
-          colorScheme={user.votes[imageId] === -1 ? `${theme}` : 'black'}
+          colorScheme={user.votes[ideaId] === -1 ? `${theme}` : 'black'}
           aria-label="downvote"
           variant="ghost"
           onClick={() => handleVote(-1)}
           icon={
-            user.votes[imageId] === -1 ? (
+            user.votes[ideaId] === -1 ? (
               <IconArrowBigDownFilled size={20} stroke={1.5} />
             ) : (
               <IconArrowBigDown size={20} stroke={1.5} />

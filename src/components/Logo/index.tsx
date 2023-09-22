@@ -20,17 +20,18 @@ function Logo() {
         fontWeight="bold"
         color={useColorModeValue('black', 'white')}
       >
-        Aidea
+        A
         <Box
           as="span"
-          color={useColorModeValue('white', 'black')}
+          // color={useColorModeValue('white', 'black')}
           borderRadius="md"
-          bg={`${theme}.500`}
-          m="0.5"
-          p="0.5"
+          color={`${theme}.500`}
+          // m="0.5"
+          mr="2"
         >
-          hub
+          idea
         </Box>
+        hub
         {user.is_plus && (
           <Box as="span" color={`${theme}.500`}>
             +

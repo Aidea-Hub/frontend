@@ -48,7 +48,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
               }}
             >
               Please login to enjoy continued access to unlimited and free
-              generation of images.
+              generation of ideas.
             </Highlight>
           </Text>
           <Text mt={4}>Thank you for supporting Aidea hub!</Text>

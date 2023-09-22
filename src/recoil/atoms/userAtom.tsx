@@ -12,7 +12,7 @@ export const userAtom = atom<User>({
     email: '',
     uid: '',
     is_plus: false,
-    liked_images: [],
+    liked_ideas: [],
     votes: {},
     theme: 'yellow',
   },

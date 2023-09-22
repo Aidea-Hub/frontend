@@ -76,10 +76,10 @@ const FeatureCard = ({
 }
 
 // const options = [
-//   { id: 1, desc: 'Top priority in image generation and all other queues' },
+//   { id: 1, desc: 'Top priority in idea generation and all other queues' },
 //   {
 //     id: 2,
-//     desc: 'Editing of images (currently in progress, basic edit functionality will be released by 6th May 2023)',
+//     desc: 'Editing of ideas (currently in progress, basic edit functionality will be released by 6th May 2023)',
 //   },
 //   { id: 3, desc: 'Discord Priviliges (Feature Voting, etc.)' },
 //   { id: 4, desc: 'Bonus Settings (Setting themes)' },
@@ -145,7 +145,7 @@ export default function GetPlus() {
               heading={'Exclusive Features'}
               icon={<Icon as={FcEditImage} w={10} h={10} />}
               description={
-                'Early access for new features and exlusive access to features such as editing images and themes.'
+                'Early access for new features and exlusive access to features such as editing ideas and themes.'
               }
               href={'#'}
             />

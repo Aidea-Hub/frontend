@@ -17,8 +17,8 @@ import Login from './pages/Login'
 import PageNotFound from './pages/PageNotFound'
 import Search from './pages/Search'
 import Settings from './pages/Settings'
-import ViewImage from './pages/ViewImage'
-import ViewSearchedImages from './pages/ViewSearchedImages'
+import ViewIdea from './pages/ViewIdea'
+import ViewSearchedIdeas from './pages/ViewSearchedIdeas'
 
 export const App = () => (
   <>
@@ -37,10 +37,10 @@ export const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route path={`${ROUTES.VIEW}/:imageId`} element={<ViewImage />} />
+            <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
             <Route
               path={`${ROUTES.VIEW_TAGS}`}
-              element={<ViewSearchedImages />}
+              element={<ViewSearchedIdeas />}
             />
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.LOGIN} element={<Login />} />

@@ -66,7 +66,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Share your image</ModalHeader>
+          <ModalHeader>Share your idea</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <HStack spacing={3}>
@@ -74,7 +74,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <RedditShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'reddit',
                     })
@@ -92,7 +92,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <TumblrShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'tumblr',
                     })
@@ -109,7 +109,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <TwitterShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'twitter',
                     })
@@ -122,7 +122,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <PocketShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'pocket',
                     })
@@ -135,7 +135,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <TelegramShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'telegram',
                     })
@@ -148,7 +148,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <WhatsappShareButton
                   url={url}
                   onClick={() =>
-                    logEvent(analytics, 'share_image', {
+                    logEvent(analytics, 'share_idea', {
                       url: url,
                       platform: 'whatsapp',
                     })
@@ -164,7 +164,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 <InputRightElement width="5rem">
                   <Button
                     onClick={() => {
-                      logEvent(analytics, 'share_image', {
+                      logEvent(analytics, 'share_idea', {
                         url: url,
                         platform: 'copied_url',
                       })

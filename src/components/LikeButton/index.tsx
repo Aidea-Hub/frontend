@@ -8,32 +8,32 @@ import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
 interface LikeButtonProps {
-  imageId: string
+  ideaId: string
 }
 
-const LikeButton = ({ imageId }: LikeButtonProps) => {
+const LikeButton = ({ ideaId }: LikeButtonProps) => {
   const [user, setUser] = useRecoilState(userAtom)
   const theme = useRecoilValue(themeSelector)
 
   const handleLike = () => {
-    if (imageId && user.uid) {
-      const likes = [...user.liked_images]
-      const index = likes.indexOf(imageId)
+    if (ideaId && user.uid) {
+      const likes = [...user.liked_ideas]
+      const index = likes.indexOf(ideaId)
       if (index !== -1) {
         // The value is already in the array, so remove it
         likes.splice(index, 1)
       } else {
         // Append the value to the end of the array
-        likes.push(imageId)
+        likes.push(ideaId)
       }
 
       setUser({
         ...user,
-        liked_images: likes,
+        liked_ideas: likes,
       })
 
-      authApi.post('/likeImage', {
-        imageId,
+      authApi.post('/likeIdea', {
+        ideaId,
         userId: user.uid,
       })
     }
@@ -44,7 +44,7 @@ const LikeButton = ({ imageId }: LikeButtonProps) => {
       <IconButton
         isDisabled={user.uid === ''}
         colorScheme={
-          user.liked_images && user.liked_images.includes(imageId)
+          user.liked_ideas && user.liked_ideas.includes(ideaId)
             ? `${theme}`
             : 'black'
         }
@@ -52,7 +52,7 @@ const LikeButton = ({ imageId }: LikeButtonProps) => {
         variant="ghost"
         onClick={handleLike}
         icon={
-          user.liked_images && user.liked_images.includes(imageId) ? (
+          user.liked_ideas && user.liked_ideas.includes(ideaId) ? (
             <FaHeart />
           ) : (
             <FiHeart />

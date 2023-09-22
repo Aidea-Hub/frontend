@@ -20,9 +20,9 @@ import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
 const options = [
-  { id: 1, desc: 'Unlimited image generation' },
-  { id: 2, desc: 'Vote and like images' },
-  { id: 3, desc: 'Browse your liked images' },
+  { id: 1, desc: 'Unlimited idea generation' },
+  { id: 2, desc: 'Vote and like ideas' },
+  { id: 3, desc: 'Browse your liked ideas' },
   { id: 4, desc: 'Sync your settings' },
 ]
 

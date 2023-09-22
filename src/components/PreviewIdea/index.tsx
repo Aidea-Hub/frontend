@@ -23,23 +23,23 @@ import LikeButton from '../LikeButton'
 import SelectedTagList from '../SelectedTagList'
 import ShareButton from '../ShareButton'
 import VoteButton from '../VoteButton'
-interface PreviewImageProps {
+interface PreviewIdeaProps {
   isOpen: boolean
   onClose: any
   post: any
 }
 
-export default function PreviewImage({
+export default function PreviewIdea({
   isOpen,
   onClose,
-  post: image,
-}: PreviewImageProps) {
+  post: idea,
+}: PreviewIdeaProps) {
   const size = useBreakpointValue({ base: 'md', md: 'xl' })
   const { colorMode } = useColorMode()
   const navigate = useNavigate()
 
   // TODO change to tags length
-  //const imageMarginTop = !post.awards.length ? 3 : 0
+  //const ideaMarginTop = !post.awards.length ? 3 : 0
 
   return (
     <Modal
@@ -58,14 +58,14 @@ export default function PreviewImage({
             <Stack mt={10} maxWidth={512}>
               <Image
                 rounded={'md'}
-                src={image.url}
+                src={idea.url}
                 maxH={512}
                 objectFit="contain"
-                fallbackSrc={`https://dummyimage.com/${512}x${768}/${
+                fallbackSrc={`https://dummyidea.com/${512}x${768}/${
                   colorMode === 'light' ? 'aaa' : 'fff'
                 }/${
                   colorMode === 'light' ? 'FED7D7' : 'C53030'
-                }.png&text=Image+removed+or+does+not+exist`}
+                }.png&text=Idea+removed+or+does+not+exist`}
                 fallbackStrategy="onError"
               />
               <Flex
@@ -75,11 +75,7 @@ export default function PreviewImage({
                 justify="space-between"
                 w="100%"
               >
-                <VoteButton
-                  imageId={image.id}
-                  votes={image.votes}
-                  image={image}
-                />
+                <VoteButton ideaId={idea.id} votes={idea.votes} idea={idea} />
 
                 <Flex align="center">
                   <IconButton
@@ -87,27 +83,27 @@ export default function PreviewImage({
                     variant="ghost"
                     icon={<FaEdit />}
                     onClick={() => {
-                      navigate(`${ROUTES.VIEW}/${image.id}`)
+                      navigate(`${ROUTES.VIEW}/${idea.id}`)
                     }}
                   ></IconButton>
-                  <ShareButton url={image.url} />
-                  <LikeButton imageId={image.id} />
+                  <ShareButton url={idea.url} />
+                  <LikeButton ideaId={idea.id} />
                   {/* <Text ml={1}>
-                    {image.created_at &&
+                    {idea.created_at &&
                       new Date(
-                        image.created_at.seconds * 1000
+                        idea.created_at.seconds * 1000
                       ).toLocaleDateString()}
                   </Text> */}
                 </Flex>
               </Flex>
-              {image.tags && <Text>Tags: </Text>}
-              {image.tags && image.tags.length == 0 ? (
+              {idea.tags && <Text>Tags: </Text>}
+              {idea.tags && idea.tags.length == 0 ? (
                 <Text>No Tags </Text>
               ) : (
                 <>
-                  {image.tags && (
+                  {idea.tags && (
                     <SelectedTagList
-                      tags={image.tags}
+                      tags={idea.tags}
                       isDisabled
                       onClick={
                         // eslint-disable-next-line @typescript-eslint/no-empty-function

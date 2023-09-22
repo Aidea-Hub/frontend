@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
-import ImageCard from '../../components/ImageCard'
-import PreviewImage from '../../components/PreviewImage'
+import IdeaCard from '../../components/IdeaCard'
+import PreviewIdea from '../../components/PreviewIdea'
 import PulsingDot from '../../components/PulsingDot'
 import firebase from '../../config/firebase'
 import { getCDNUrl } from '../../constants'
@@ -38,7 +38,7 @@ const Liked = () => {
 
   const [likes, setLikes] = useState<string[]>([])
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [images, setImages] = useState<any[]>([])
+  const [ideas, setIdeas] = useState<any[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,26 +47,26 @@ const Liked = () => {
     onOpen()
   }
 
-  const getInitialImages = async () => {
-    console.log('getInitialImages')
-    console.log('user.liked_images', user.liked_images)
-    logEvent(analytics, 'liked_get_initial_images', {
+  const getInitialIdeas = async () => {
+    console.log('getInitialIdeas')
+    console.log('user.liked_ideas', user.liked_ideas)
+    logEvent(analytics, 'liked_get_initial_ideas', {
       sort: likedSort,
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newImages: any[] = []
-    const userLikedImages = [...user.liked_images]
+    const newIdeas: any[] = []
+    const userLikedIdeas = [...user.liked_ideas]
     if (likedSort === 'liked_at-desc') {
-      setLikes(userLikedImages.reverse())
+      setLikes(userLikedIdeas.reverse())
     } else {
-      setLikes(userLikedImages)
+      setLikes(userLikedIdeas)
     }
 
-    const len = Math.min(PAGE_LIMIT, userLikedImages.length)
+    const len = Math.min(PAGE_LIMIT, userLikedIdeas.length)
     for (let i = 0; i < len; i++) {
-      newImages.push({
-        id: userLikedImages[i],
-        url: getCDNUrl(userLikedImages[i]),
+      newIdeas.push({
+        id: userLikedIdeas[i],
+        url: getCDNUrl(userLikedIdeas[i]),
       })
     }
 
@@ -74,11 +74,11 @@ const Liked = () => {
       setLastVisible(len)
     }
 
-    setHasNextPage(newImages.length == PAGE_LIMIT)
+    setHasNextPage(newIdeas.length == PAGE_LIMIT)
 
-    setImages(newImages)
+    setIdeas(newIdeas)
     setLoading(false)
-    console.log('newImages', newImages)
+    console.log('newIdeas', newIdeas)
   }
 
   const fetchNextPage = async () => {
@@ -86,10 +86,10 @@ const Liked = () => {
 
     if (lastVisible !== undefined) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const newImages: any[] = []
+      const newIdeas: any[] = []
       const len = Math.min(lastVisible + 1 + PAGE_LIMIT, likes.length)
       for (let i = lastVisible + 1; i < len; i++) {
-        newImages.push({
+        newIdeas.push({
           id: likes[i],
           url: getCDNUrl(likes[i]),
         })
@@ -99,24 +99,24 @@ const Liked = () => {
         setLastVisible(len)
       }
 
-      setHasNextPage(newImages.length == PAGE_LIMIT)
-      setImages([...images, ...newImages])
-      console.log('newImages', newImages)
+      setHasNextPage(newIdeas.length == PAGE_LIMIT)
+      setIdeas([...ideas, ...newIdeas])
+      console.log('newIdeas', newIdeas)
     }
   }
 
   useEffect(() => {
-    getInitialImages()
+    getInitialIdeas()
   }, [])
 
   useEffect(() => {
-    getInitialImages()
+    getInitialIdeas()
   }, [likedSort])
 
   return (
     <>
       <Header
-        title="Liked Images"
+        title="Liked Ideas"
         description="View your liked AI generated ideas"
       />
       <Box minHeight="100vh" display="flex" flexDir="column">
@@ -130,7 +130,7 @@ const Liked = () => {
                   Liked
                 </Heading>
                 <Text fontSize="lg" fontWeight="semibold" mt={2}>
-                  Browse images liked by you
+                  Browse ideas liked by you
                 </Text>
               </Box>
               <InfiniteScroll
@@ -143,14 +143,14 @@ const Liked = () => {
                   spacing={5}
                   mt={6}
                 >
-                  {images.map((post: any) => (
-                    <ImageCard key={post.id} image={post} onImageClick={view} />
+                  {ideas.map((post: any) => (
+                    <IdeaCard key={post.id} idea={post} onIdeaClick={view} />
                   ))}
                 </SimpleGrid>
               </InfiniteScroll>
 
               {selectedPost && (
-                <PreviewImage
+                <PreviewIdea
                   isOpen={isOpen}
                   onClose={onClose}
                   post={selectedPost}

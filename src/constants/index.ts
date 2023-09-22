@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore'
 
-export const getCDNUrl = (imageId: string) => {
-  return 'https://picsum.photos/seed/picsum/' + imageId + '/200/300'
+export const getCDNUrl = (ideaId: string) => {
+  return 'https://picsum.photos/seed/' + ideaId + '/400/600'
 }
 
 export interface Request {
@@ -10,18 +10,18 @@ export interface Request {
   url?: string
   tags?: string[]
 }
-export const getImageIdFromUrl = (url: string): string => {
+export const getIdeaIdFromUrl = (url: string): string => {
   const pathSegments = url.split('/')
-  const imageNameWithExtension = pathSegments[pathSegments.length - 1]
-  // Split the image name by '.' to get an array of name and extension
-  const imageNameSegments = imageNameWithExtension.split('.')
-  return imageNameSegments[0]
+  const ideaNameWithExtension = pathSegments[pathSegments.length - 1]
+  // Split the idea name by '.' to get an array of name and extension
+  const ideaNameSegments = ideaNameWithExtension.split('.')
+  return ideaNameSegments[0]
 }
 
 export const REQUEST_TYPES = {
-  GENERATE_IMAGE: 'generate image',
-  SIMILAR_IMAGE: 'similar image',
-  UPDATE_TAGS: 'update image tags',
+  GENERATE_IMAGE: 'generate idea',
+  SIMILAR_IMAGE: 'similar idea',
+  UPDATE_TAGS: 'update idea tags',
 }
 
 export const ROUTES = {
@@ -46,12 +46,12 @@ export interface User {
   email: string
   uid: string
   is_plus: boolean
-  liked_images: string[]
-  votes: { [imageId: string]: number }
+  liked_ideas: string[]
+  votes: { [ideaId: string]: number }
   theme?: string
 }
 
-export interface Image {
+export interface Idea {
   ai_model: string
   created_at: Timestamp
   id: string
