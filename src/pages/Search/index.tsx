@@ -1,4 +1,4 @@
-import { Box, Container, Heading, Text } from '@chakra-ui/react'
+import { Box, Container, Heading, Input, Text } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
 import { themeSelector } from '../../recoil/selectors'
@@ -20,6 +20,7 @@ export default function Search() {
           <Text fontSize="lg" fontWeight="semibold" mt={2} mb={2}>
             Find specific ideas
           </Text>
+          <Input></Input>
         </Box>
       </Container>
     </>

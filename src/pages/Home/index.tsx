@@ -30,7 +30,7 @@ export default function Home() {
         <Alert status="info" borderRadius={6} mb={10}>
           <AlertIcon />
           <Text as="span">
-            For our BETA program, we will only be given limited tokens to
+            For our BETA program, we will only be giving limited tokens to
             selected users. Feel free to join our{' '}
             <Button
               as="a"
