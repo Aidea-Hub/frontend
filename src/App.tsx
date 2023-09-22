@@ -15,6 +15,7 @@ import TermsOfService from './pages/Legal/TermsOfService'
 import Liked from './pages/Liked'
 import Login from './pages/Login'
 import PageNotFound from './pages/PageNotFound'
+import PastIdeas from './pages/PastIdeas'
 import Search from './pages/Search'
 import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
@@ -37,9 +38,11 @@ export const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path={ROUTES.GALLERY} element={<Gallery />} />
+            <Route path={ROUTES.PAST_IDEAS} element={<PastIdeas />} />
             <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
             <Route
-              path={`${ROUTES.VIEW_TAGS}`}
+              path={`${ROUTES.VIEW_SEARCHED}`}
               element={<ViewSearchedIdeas />}
             />
             <Route path={ROUTES.SETTINGS} element={<Settings />} />

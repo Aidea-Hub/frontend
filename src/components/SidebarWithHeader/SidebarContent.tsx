@@ -6,7 +6,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
-import { FiHeart, FiHome, FiImage, FiSearch, FiSettings } from 'react-icons/fi'
+import {
+  AiOutlineBook,
+  AiOutlineBulb,
+  AiOutlineHeart,
+  AiOutlineHome,
+  AiOutlineSearch,
+  AiOutlineSetting,
+} from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import Logo from '../Logo'
@@ -19,11 +26,12 @@ interface LinkItemProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', path: ROUTES.HOME, icon: FiHome },
-  { name: 'Gallery', path: ROUTES.GALLERY, icon: FiImage },
-  { name: 'Liked', path: ROUTES.LIKED, icon: FiHeart },
-  { name: 'Search', path: ROUTES.SEARCH, icon: FiSearch },
-  { name: 'Settings', path: ROUTES.SETTINGS, icon: FiSettings },
+  { name: 'Home', path: ROUTES.HOME, icon: AiOutlineHome },
+  { name: 'Inspiration', path: ROUTES.GALLERY, icon: AiOutlineBulb },
+  { name: 'Past Ideas', path: ROUTES.PAST_IDEAS, icon: AiOutlineBook },
+  { name: 'Liked', path: ROUTES.LIKED, icon: AiOutlineHeart },
+  { name: 'Search', path: ROUTES.SEARCH, icon: AiOutlineSearch },
+  { name: 'Settings', path: ROUTES.SETTINGS, icon: AiOutlineSetting },
 ]
 
 interface SidebarProps extends BoxProps {
