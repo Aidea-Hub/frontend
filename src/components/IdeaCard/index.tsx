@@ -1,0 +1,82 @@
+import {
+  Box,
+  Flex,
+  Image as Img,
+  Text,
+  useColorMode,
+  useColorModeValue,
+} from '@chakra-ui/react'
+import { motion } from 'framer-motion'
+import { useRecoilValue } from 'recoil'
+import { Idea } from '../../constants'
+import { userAtom } from '../../recoil/atoms'
+import LikeButton from '../LikeButton'
+import VoteButton from '../VoteButton'
+
+const MotionImg = motion(Img)
+
+interface IdeaCardProps {
+  idea: Idea
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onIdeaClick: any
+}
+
+export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
+  const cardColor = useColorModeValue('gray.100', 'gray.700')
+  const user = useRecoilValue(userAtom)
+  const { colorMode } = useColorMode()
+
+  const isBlacklisted = () => {
+    if (user.votes[idea.id] && user.votes[idea.id] === -1) {
+      return true
+    }
+    if (Array.isArray(idea.tags)) {
+      return idea.tags.some(item => user.blacklist.includes(item))
+    }
+    return false
+  }
+
+  return (
+    <Box
+      backgroundColor={cardColor}
+      borderRadius={['sm', null, 'md']}
+      overflow="hidden"
+    >
+      <Box
+        onClick={() => onIdeaClick(idea)}
+        cursor="pointer"
+        h="240px"
+        position="relative"
+        overflow="hidden"
+      >
+        <MotionImg
+          transition={{ duration: 0.3 }}
+          whileHover={{ scale: 1.1 }}
+          w="100%"
+          h="100%"
+          objectFit="cover"
+          src={idea.url}
+          fallbackSrc={`https://dummyidea.com/${512}x${768}/${
+            colorMode === 'light' ? 'aaa' : 'fff'
+          }/${
+            colorMode === 'light' ? 'FED7D7' : 'C53030'
+          }.png&text=Idea+removed+or+does+not+exist`}
+          style={{
+            filter: isBlacklisted() ? 'blur(16px)' : '',
+          }}
+          fallbackStrategy="onError"
+        />
+      </Box>
+      <Flex px="4" py="2" align="center" justify="space-between" w="100%">
+        <VoteButton ideaId={idea.id} />
+        <Flex align="center">
+          <LikeButton ideaId={idea.id} />
+          <Text ml={1} fontSize={['xs', null, 'sm']}>
+            {idea.created_at &&
+              new Date(idea.created_at.seconds * 1000).toLocaleDateString()}
+          </Text>
+        </Flex>
+      </Flex>
+    </Box>
+  )
+}
