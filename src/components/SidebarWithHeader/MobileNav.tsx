@@ -32,15 +32,21 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   const isRenderPopoverSort = () =>
-    location.pathname == ROUTES.GALLERY || location.pathname == ROUTES.LIKED
-  const isRenderPopoverFilter = () => location.pathname == ROUTES.GALLERY
+    location.pathname == ROUTES.GALLERY ||
+    location.pathname == ROUTES.LIKED ||
+    location.pathname == ROUTES.PAST_IDEAS ||
+    location.pathname == ROUTES.SEARCH
 
   const [gallerySort, setGallerySort] = useRecoilState(gallerySortAtom)
   const [likedSort, setLikedSort] = useRecoilState(likedSortAtom)
   const theme = useRecoilValue(themeSelector)
 
   const getSortOptions = () => {
-    if (location.pathname == ROUTES.GALLERY) {
+    if (
+      location.pathname == ROUTES.GALLERY ||
+      location.pathname == ROUTES.PAST_IDEAS ||
+      location.pathname == ROUTES.SEARCH
+    ) {
       return GallerySortOptions
     } else {
       // assumes location.pathname == ROUTES.LIKED
@@ -86,7 +92,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     resetUser()
   }
 
-  const handleGetaideahubPlus = () => {
+  const handleGetAideahubPlus = () => {
     logEvent(analytics, 'get_aideahub_plus', {
       from_page: location.pathname,
     })
@@ -122,7 +128,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             {location.pathname != ROUTES.GET_PLUS && (
               <ShimmerButton
                 text="Get Aidea hub+"
-                onClick={handleGetaideahubPlus}
+                onClick={handleGetAideahubPlus}
               />
             )}
           </>
@@ -133,7 +139,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <Hide below="md">
                 <ShimmerButton
                   text="Get Aidea hub+"
-                  onClick={handleGetaideahubPlus}
+                  onClick={handleGetAideahubPlus}
                 />
               </Hide>
             )}
