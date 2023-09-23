@@ -13,8 +13,8 @@ import {
   Stack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { FaSort } from 'react-icons/fa'
 import React from 'react'
+import { FaSort } from 'react-icons/fa'
 import { useRecoilValue } from 'recoil'
 import { themeSelector } from '../../recoil/selectors'
 

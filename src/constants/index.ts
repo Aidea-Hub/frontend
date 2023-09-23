@@ -10,6 +10,7 @@ export interface Request {
   url?: string
   tags?: string[]
 }
+
 export const getIdeaIdFromUrl = (url: string): string => {
   const pathSegments = url.split('/')
   const ideaNameWithExtension = pathSegments[pathSegments.length - 1]
