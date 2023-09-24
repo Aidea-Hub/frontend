@@ -61,4 +61,8 @@ export interface Idea {
   tags: string[]
   url: string
   votes: number
+  title: string
+  description: string
+  keywords: string[]
+  user_id: string
 }
