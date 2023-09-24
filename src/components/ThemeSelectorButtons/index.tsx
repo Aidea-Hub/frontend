@@ -12,7 +12,7 @@ const ThemeSelectorButtons = ({
   currentColour,
 }: ThemeSelectorButtonsProps) => {
   const colours = [
-    'gray',
+    // 'gray',
     'red',
     'orange',
     'yellow',
