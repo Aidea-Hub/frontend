@@ -1,4 +1,4 @@
-import { SearchIcon } from '@chakra-ui/icons'
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   SimpleGrid,
   Spacer,
   Text,
@@ -74,6 +75,8 @@ const Gallery = () => {
     if (extractedKeywords.length > 0) {
       setKeyword(stemmer(extractedKeywords[0]))
       console.log(keyword)
+    } else {
+      setKeyword('')
     }
   }
 
@@ -186,6 +189,15 @@ const Gallery = () => {
                         onChange={event => setValue(event.target.value)}
                         placeholder="Search for ideas"
                       />
+                      <InputRightElement>
+                        <CloseIcon
+                          fontSize="sm"
+                          onClick={() => {
+                            setValue('')
+                            setKeyword('')
+                          }}
+                        />
+                      </InputRightElement>
                     </InputGroup>
                     <Spacer mx={2} />
                     <Button onClick={handleSubmit} colorScheme={`${theme}`}>
