@@ -19,7 +19,6 @@ import PastIdeas from './pages/PastIdeas'
 import Search from './pages/Search'
 import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
-import ViewSearchedIdeas from './pages/ViewSearchedIdeas'
 
 export const App = () => (
   <>
@@ -48,10 +47,6 @@ export const App = () => (
               }
             />
             <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
-            <Route
-              path={`${ROUTES.VIEW_SEARCHED}`}
-              element={<ViewSearchedIdeas />}
-            />
             <Route
               path={ROUTES.SETTINGS}
               element={
