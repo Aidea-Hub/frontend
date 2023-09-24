@@ -39,7 +39,14 @@ export const App = () => (
               }
             />
             <Route path={ROUTES.GALLERY} element={<Gallery />} />
-            <Route path={ROUTES.PAST_IDEAS} element={<PastIdeas />} />
+            <Route
+              path={ROUTES.PAST_IDEAS}
+              element={
+                <ProtectedRoute>
+                  <PastIdeas />
+                </ProtectedRoute>
+              }
+            />
             <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
             <Route
               path={`${ROUTES.VIEW_SEARCHED}`}

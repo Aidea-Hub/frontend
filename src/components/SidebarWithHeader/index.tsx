@@ -16,7 +16,7 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.200', 'gray.800')}>
+    <Box minH="100vh" bg={useColorModeValue('gray.150', 'gray.850')}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
