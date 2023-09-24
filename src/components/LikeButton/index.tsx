@@ -17,6 +17,7 @@ const LikeButton = ({ ideaId }: LikeButtonProps) => {
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
+    console.log('handleLike Clicked', ideaId, user.uid)
     if (ideaId && user.uid) {
       const likes = [...user.liked_ideas]
       const index = likes.indexOf(ideaId)

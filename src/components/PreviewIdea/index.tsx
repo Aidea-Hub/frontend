@@ -86,7 +86,9 @@ export default function PreviewIdea({
                       navigate(`${ROUTES.VIEW}/${idea.id}`)
                     }}
                   ></IconButton> */}
-                  <ShareButton url={idea.url} />
+                  <ShareButton
+                    url={`${window.location.protocol}//${window.location.host}${ROUTES.VIEW}/${idea.id}`}
+                  />
                   <LikeButton ideaId={idea.id} />
                   <Text ml={1}>
                     {idea.created_at &&
