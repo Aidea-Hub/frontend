@@ -15,7 +15,8 @@ const LikeButton = ({ ideaId }: LikeButtonProps) => {
   const [user, setUser] = useRecoilState(userAtom)
   const theme = useRecoilValue(themeSelector)
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
     if (ideaId && user.uid) {
       const likes = [...user.liked_ideas]
       const index = likes.indexOf(ideaId)

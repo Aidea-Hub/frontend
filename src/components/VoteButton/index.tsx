@@ -68,7 +68,10 @@ const VoteButton = ({ ideaId, votes, idea }: VoteButtonProps) => {
           colorScheme={user.votes[ideaId] === 1 ? `${theme}` : 'black'}
           aria-label="upvote"
           variant="ghost"
-          onClick={() => handleVote(1)}
+          onClick={e => {
+            e.stopPropagation()
+            handleVote(1)
+          }}
           icon={
             user.votes[ideaId] === 1 ? (
               <IconArrowBigUpFilled size={20} stroke={1.5} />
@@ -85,7 +88,10 @@ const VoteButton = ({ ideaId, votes, idea }: VoteButtonProps) => {
           colorScheme={user.votes[ideaId] === -1 ? `${theme}` : 'black'}
           aria-label="downvote"
           variant="ghost"
-          onClick={() => handleVote(-1)}
+          onClick={e => {
+            e.stopPropagation()
+            handleVote(-1)
+          }}
           icon={
             user.votes[ideaId] === -1 ? (
               <IconArrowBigDownFilled size={20} stroke={1.5} />
