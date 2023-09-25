@@ -133,15 +133,18 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           </>
         ) : (
           <>
-            {/* For Gallery, hide if below md */}
-            {location.pathname != ROUTES.GET_PLUS && !isPlusUser() && (
-              <Hide below="md">
-                <ShimmerButton
-                  text="Get Aidea hub+"
-                  onClick={handleGetAideahubPlus}
-                />
-              </Hide>
-            )}
+            {/* For views with sort, hide if below md */}
+            {(location.pathname != ROUTES.GET_PLUS ||
+              location.pathname == ROUTES.PAST_IDEAS ||
+              location.pathname == ROUTES.SEARCH) &&
+              !isPlusUser() && (
+                <Hide below="md">
+                  <ShimmerButton
+                    text="Get Aidea hub+"
+                    onClick={handleGetAideahubPlus}
+                  />
+                </Hide>
+              )}
           </>
         )}
       </Flex>

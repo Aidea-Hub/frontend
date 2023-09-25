@@ -10,6 +10,7 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
+  Link,
   SimpleGrid,
   Spacer,
   Text,
@@ -30,6 +31,7 @@ import {
 import keywordExtractor from 'keyword-extractor'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
+import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { stemmer } from 'stemmer'
 import Header from '../../components/Head'
@@ -37,6 +39,7 @@ import IdeaCard from '../../components/IdeaCard'
 import PreviewIdea from '../../components/PreviewIdea'
 import PulsingDot from '../../components/PulsingDot'
 import firebase from '../../config/firebase'
+import { ROUTES } from '../../constants'
 import { gallerySortAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
@@ -60,6 +63,7 @@ const Gallery = () => {
   const [isLoading, setLoading] = useState(true)
   const [isEmpty, setEmpty] = useState(true)
   const gallerySort = useRecoilValue(gallerySortAtom)
+  const navigate = useNavigate()
 
   const theme = useRecoilValue(themeSelector)
 
@@ -231,7 +235,14 @@ const Gallery = () => {
                   </Heading>
                   <Text color={'gray.500'}>
                     Try using different keywords, or be the first to generate a
-                    similar idea yourself 💡
+                    similar idea yourself{' '}
+                    <Link
+                      color={`${theme}.500`}
+                      onClick={() => navigate(ROUTES.HOME)}
+                    >
+                      here
+                    </Link>
+                    💡
                   </Text>
                 </Box>
               )}
