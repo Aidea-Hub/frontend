@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import GoogleLoginButton from '../../components/GoogleLoginButton'
 import Header from '../../components/Head'
-import { ROUTES } from '../../constants'
+import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
@@ -44,7 +44,7 @@ export default function Login() {
         title="Login"
         description="Login to access more features for Aidea hub"
       />
-      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${200}px)`}>
+      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
         <Box
           rounded={'lg'}
           bg={useColorModeValue('white', 'gray.700')}

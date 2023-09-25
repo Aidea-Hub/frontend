@@ -2,7 +2,7 @@ import { Box, Button, Container, Heading, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
-import { ROUTES } from '../../constants'
+import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { themeSelector } from '../../recoil/selectors'
 
 export default function PageNotFound() {
@@ -15,7 +15,7 @@ export default function PageNotFound() {
         title="Not Found"
         description="Create AI Generated Ideas. Try it now!"
       />
-      <Container maxW="5xl" minH={`calc(100vh - ${200}px)`}>
+      <Container maxW="5xl" minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
         <Box textAlign="center" py={10} px={6}>
           <Heading
             display="inline-block"

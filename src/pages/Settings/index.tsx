@@ -18,6 +18,7 @@ import authApi from '../../api/authApi'
 import Header from '../../components/Head'
 import ThemeSelectorButtons from '../../components/ThemeSelectorButtons'
 import { themeSelector } from '../../recoil/selectors'
+import { NAVBAR_HEIGHT } from '../../constants'
 
 const Settings = () => {
   const [user, setUser] = useRecoilState(userAtom)
@@ -112,7 +113,7 @@ const Settings = () => {
         title="Settings"
         description="Configure your AI idea generation experience"
       />
-      <Container maxW={'5xl'} minH={`calc(100vh - ${200}px)`}>
+      <Container maxW={'5xl'} minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
         <Heading mb={4}>Settings</Heading>
         {renderAlert()}
         <Divider />

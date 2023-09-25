@@ -1,33 +1,28 @@
 import {
-  Alert,
-  AlertIcon,
-  Button,
-  Container,
-  Heading,
-  Input,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+    Alert,
+    AlertIcon,
+    Button,
+    Container,
+    Heading,
+    Input,
+    SimpleGrid,
+    Stack,
+    Text,
+  } from '@chakra-ui/react'
+import Header from '../../components/Head'
+import { themeSelector } from '../../recoil/selectors'
+import firebase from '../../config/firebase'
 import { getAnalytics, logEvent } from 'firebase/analytics'
 import { useRecoilValue } from 'recoil'
-import Header from '../../components/Head'
-import firebase from '../../config/firebase'
-import { themeSelector } from '../../recoil/selectors'
 import { NAVBAR_HEIGHT } from '../../constants'
 
 const analytics = getAnalytics(firebase)
 
-export default function Home() {
-  const theme = useRecoilValue(themeSelector)
-
-  return (
-    <>
-      <Header
-        title="Generate Ideas"
-        description="Create ideas for your next project"
-      />
-      <Container maxW={'5xl'} minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
+const IdeaGeneration = () => {
+    const theme = useRecoilValue(themeSelector)
+    return (
+        <>
+        <Container maxW={'5xl'} minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
         <Alert status="info" borderRadius={6} mb={10}>
           <AlertIcon />
           <Text as="span">
@@ -61,6 +56,8 @@ export default function Home() {
           /> */}
         </SimpleGrid>
       </Container>
-    </>
-  )
+      </>
+    )
 }
+
+export default IdeaGeneration;

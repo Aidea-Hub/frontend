@@ -20,6 +20,7 @@ import Search from './pages/Search'
 import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
 import ViewSearchedIdeas from './pages/ViewSearchedIdeas'
+import IdeaGeneration from './pages/IdeaGeneration'
 
 export const App = () => (
   <>
@@ -30,6 +31,7 @@ export const App = () => (
             <Route path={ROUTES.HOME} element={<Home />} />
             <Route path={ROUTES.SEARCH} element={<Search />} />
             <Route path={ROUTES.GALLERY} element={<Gallery />} />
+            <Route path={ROUTES.IDEA_GENERATION} element={<IdeaGeneration />} />
             <Route
               path={ROUTES.LIKED}
               element={
@@ -60,6 +62,14 @@ export const App = () => (
                 </ProtectedRoute>
               }
             />
+            {/* <Route
+              path={ROUTES.IDEA_GENERATION}
+              element={
+                <ProtectedRoute>
+                  <IdeaGeneration />
+                </ProtectedRoute>
+              }
+            /> */}
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.GET_PLUS} element={<GetPlus />} />
             <Route path={ROUTES.TOS} element={<TermsOfService />} />

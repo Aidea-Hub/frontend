@@ -22,7 +22,7 @@ import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
 import ShimmerButton from '../../components/ShimmerButton'
 import firebase from '../../config/firebase'
-import { ROUTES } from '../../constants'
+import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
@@ -108,7 +108,7 @@ export default function GetPlus() {
         title="Get Aidea hub+"
         description="Upgrade to access full functionality for Aidea hub"
       />
-      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${200}px)`}>
+      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
         <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
           <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
             Upgrade to Aidea hub+
