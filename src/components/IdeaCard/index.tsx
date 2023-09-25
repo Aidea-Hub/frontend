@@ -13,6 +13,7 @@ import { Idea } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import LikeButton from '../LikeButton'
 import VoteButton from '../VoteButton'
+import { themeSelector } from '../../recoil/selectors'
 
 const MotionImg = motion(Img)
 
@@ -20,12 +21,15 @@ interface IdeaCardProps {
   idea: Idea
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onIdeaClick: any
+  selected?: boolean
+  isGeneratedIdea?: boolean
 }
 
-export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
+export default function IdeaCard({ idea, onIdeaClick, selected = false, isGeneratedIdea = false }: IdeaCardProps) {
   const cardColor = useColorModeValue('gray.100', 'gray.700')
   const user = useRecoilValue(userAtom)
   const { colorMode } = useColorMode()
+  const theme = useRecoilValue(themeSelector)
 
   const isBlacklisted = () => {
     if (user.votes[idea.id] && user.votes[idea.id] === -1) {
@@ -39,6 +43,8 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
 
   return (
     <Box
+      border={"4px"}
+      borderColor={selected ? theme : "transparent"}
       backgroundColor={cardColor}
       borderRadius={['sm', null, 'md']}
       overflow="hidden"
@@ -59,7 +65,7 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
             colorMode === 'light' ? 'FED7D7' : 'C53030'
           }.png&text=Idea+removed+or+does+not+exist`}
           style={{
-            filter: isBlacklisted() ? 'blur(16px)' : '',
+            filter: !isGeneratedIdea && isBlacklisted() ? 'blur(16px)' : '',
           }}
           fallbackStrategy="onError"
         />
@@ -81,7 +87,7 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
           {idea.description}
         </Text>
       </Box>
-      <Flex px="4" py="2" align="center" justify="space-between" w="100%">
+      {!isGeneratedIdea && <Flex px="4" py="2" align="center" justify="space-between" w="100%">
         <VoteButton ideaId={idea.id} />
         <Flex align="center">
           <LikeButton ideaId={idea.id} />
@@ -90,7 +96,7 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
               new Date(idea.created_at.seconds * 1000).toLocaleDateString()}
           </Text>
         </Flex>
-      </Flex>
+      </Flex>}
     </Box>
   )
 }
