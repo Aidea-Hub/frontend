@@ -58,6 +58,7 @@ const Gallery = () => {
   const [ideas, setIdeas] = useState<any[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const [isLoading, setLoading] = useState(true)
+  const [isEmpty, setEmpty] = useState(true)
   const gallerySort = useRecoilValue(gallerySortAtom)
 
   const theme = useRecoilValue(themeSelector)
@@ -76,7 +77,7 @@ const Gallery = () => {
       setKeyword(stemmer(extractedKeywords[0]))
       console.log(keyword)
     } else {
-      setKeyword('')
+      setKeyword(value)
     }
   }
 
@@ -121,6 +122,8 @@ const Gallery = () => {
     if (ideasDocs.length > 0) {
       setLastVisible(ideasDocs[ideasDocs.length - 1])
     }
+
+    setEmpty(newIdeas.length == 0)
 
     setHasNextPage(newIdeas.length == PAGE_LIMIT)
 
@@ -206,6 +209,32 @@ const Gallery = () => {
                   </Flex>
                 </Center>
               </Box>
+              {isEmpty && (
+                <Box textAlign="center" py={10} px={6}>
+                  <Box display="inline-block">
+                    <Flex
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      bg={`${theme}.500`}
+                      rounded={'50px'}
+                      w={'55px'}
+                      h={'55px'}
+                      textAlign="center"
+                    >
+                      <SearchIcon boxSize={'30px'} color={'white'} />
+                    </Flex>
+                  </Box>
+
+                  <Heading as="h2" size="xl" mt={6} mb={2}>
+                    No Search results found
+                  </Heading>
+                  <Text color={'gray.500'}>
+                    Try using different keywords, or be the first to generate a
+                    similar idea yourself 💡
+                  </Text>
+                </Box>
+              )}
               <InfiniteScroll
                 hasMore={hasNextPage}
                 loadMore={fetchNextPage}
