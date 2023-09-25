@@ -2,13 +2,13 @@ import {
   Button,
   Flex,
   FlexProps,
-  Hide,
   HStack,
   IconButton,
   useColorModeValue,
+  useMediaQuery,
+  useTheme,
 } from '@chakra-ui/react'
 import { getAnalytics, logEvent } from 'firebase/analytics'
-import { FaDiscord } from 'react-icons/fa'
 import { FiMenu } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
@@ -31,6 +31,11 @@ const analytics = getAnalytics(firebase)
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const location = useLocation()
   const navigate = useNavigate()
+  const chakraTheme = useTheme()
+  const [isBelowMD] = useMediaQuery(
+    `(max-width: ${chakraTheme.breakpoints.md})`
+  )
+
   const isRenderPopoverSort = () =>
     location.pathname == ROUTES.GALLERY ||
     location.pathname == ROUTES.LIKED ||
@@ -91,6 +96,28 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     resetUser()
   }
 
+  const isRenderIsPlusButton = () => {
+    return (
+      (location.pathname != ROUTES.GET_PLUS &&
+        location.pathname != ROUTES.PAST_IDEAS &&
+        location.pathname != ROUTES.SEARCH &&
+        location.pathname != ROUTES.LIKED &&
+        location.pathname != ROUTES.GALLERY &&
+        isLoggedIn()) ||
+      !isBelowMD
+    )
+  }
+
+  const isRenderLoginButton = () => {
+    return (
+      (location.pathname != ROUTES.PAST_IDEAS &&
+        location.pathname != ROUTES.SEARCH &&
+        location.pathname != ROUTES.LIKED &&
+        location.pathname != ROUTES.GALLERY) ||
+      !isBelowMD
+    )
+  }
+
   const handleGetAideahubPlus = () => {
     logEvent(analytics, 'get_aideahub_plus', {
       from_page: location.pathname,
@@ -122,35 +149,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         icon={<FiMenu />}
       />
       <Flex flex={1} ml={5}>
-        {location.pathname !== ROUTES.GALLERY && !isPlusUser() ? (
+        {!isPlusUser() && (
           <>
-            {location.pathname != ROUTES.GET_PLUS && (
+            {isRenderIsPlusButton() && (
               <ShimmerButton
                 text="Get Aidea hub+"
                 onClick={handleGetAideahubPlus}
               />
             )}
           </>
-        ) : (
-          <>
-            {/* For views with sort, hide if below md */}
-            {(location.pathname != ROUTES.GET_PLUS ||
-              location.pathname == ROUTES.PAST_IDEAS ||
-              location.pathname == ROUTES.SEARCH) &&
-              !isPlusUser() && (
-                <Hide below="md">
-                  <ShimmerButton
-                    text="Get Aidea hub+"
-                    onClick={handleGetAideahubPlus}
-                  />
-                </Hide>
-              )}
-          </>
         )}
       </Flex>
 
       <HStack spacing={{ base: '2', md: '2' }}>
-        <Hide below="md">
+        {/* <Hide below="md">
           <IconButton
             icon={<FaDiscord />}
             as="a"
@@ -159,9 +171,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             variant="ghost"
             onClick={() => logEvent(analytics, 'header_discord')}
           />
-
-          {/* </SocialButton> */}
-        </Hide>
+        </Hide> */}
         {isRenderPopoverSort() && (
           <PopoverSort
             options={getSortOptions()}
@@ -170,14 +180,19 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           />
         )}
         <ColorModeSwitcher />
-        <Flex alignItems={'center'}>
-          <Button
-            colorScheme={`${theme}`}
-            onClick={() => (isLoggedIn() ? handleSignOut() : handleSignIn())}
-          >
-            {isLoggedIn() ? 'Sign out' : 'Login'}
-          </Button>
-        </Flex>
+        {isRenderLoginButton() && (
+          <Flex alignItems={'center'}>
+            {isLoggedIn() && !isBelowMD ? (
+              <Button colorScheme={`${theme}`} onClick={handleSignOut}>
+                Sign out
+              </Button>
+            ) : !isLoggedIn() ? (
+              <Button colorScheme={`${theme}`} onClick={handleSignIn}>
+                Login
+              </Button>
+            ) : null}
+          </Flex>
+        )}
       </HStack>
     </Flex>
   )

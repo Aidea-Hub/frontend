@@ -11,6 +11,7 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -41,6 +42,9 @@ const PopoverSort = ({ options, sort, onSort }: PopoverSortProps) => {
       onClose={onClose}
       closeOnBlur={false}
     >
+      <Text size={'xl'}>
+        {options.find(option => option.value == sort)?.name}
+      </Text>
       <PopoverTrigger>
         <IconButton icon={<FaSort />} aria-label="Filter" variant="ghost" />
       </PopoverTrigger>
