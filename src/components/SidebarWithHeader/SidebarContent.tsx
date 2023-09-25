@@ -28,9 +28,9 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', path: ROUTES.HOME, icon: AiOutlineHome },
   { name: 'Inspiration', path: ROUTES.GALLERY, icon: AiOutlineBulb },
+  { name: 'Search', path: ROUTES.SEARCH, icon: AiOutlineSearch },
   { name: 'Past Ideas', path: ROUTES.PAST_IDEAS, icon: AiOutlineBook },
   { name: 'Liked', path: ROUTES.LIKED, icon: AiOutlineHeart },
-  { name: 'Search', path: ROUTES.SEARCH, icon: AiOutlineSearch },
   { name: 'Settings', path: ROUTES.SETTINGS, icon: AiOutlineSetting },
 ]
 

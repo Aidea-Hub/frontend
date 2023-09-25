@@ -1,6 +1,7 @@
 import {
   Box,
   Flex,
+  Heading,
   Image as Img,
   Text,
   useColorMode,
@@ -41,14 +42,10 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
       backgroundColor={cardColor}
       borderRadius={['sm', null, 'md']}
       overflow="hidden"
+      onClick={() => onIdeaClick(idea)}
+      cursor="pointer"
     >
-      <Box
-        onClick={() => onIdeaClick(idea)}
-        cursor="pointer"
-        h="240px"
-        position="relative"
-        overflow="hidden"
-      >
+      <Box h="240px" position="relative" overflow="hidden">
         <MotionImg
           transition={{ duration: 0.3 }}
           whileHover={{ scale: 1.1 }}
@@ -66,6 +63,23 @@ export default function IdeaCard({ idea, onIdeaClick }: IdeaCardProps) {
           }}
           fallbackStrategy="onError"
         />
+      </Box>
+      <Box p={4} h={150}>
+        <Heading marginTop="1" size="md" noOfLines={2}>
+          <Text textDecoration="none" maxWidth="100%">
+            {idea.title}
+          </Text>
+        </Heading>
+        <Text
+          as="p"
+          marginTop="2"
+          color={useColorModeValue('gray.700', 'gray.200')}
+          fontSize="md"
+          maxWidth="100%"
+          noOfLines={3}
+        >
+          {idea.description}
+        </Text>
       </Box>
       <Flex px="4" py="2" align="center" justify="space-between" w="100%">
         <VoteButton ideaId={idea.id} />

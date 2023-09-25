@@ -39,13 +39,27 @@ export const App = () => (
               }
             />
             <Route path={ROUTES.GALLERY} element={<Gallery />} />
-            <Route path={ROUTES.PAST_IDEAS} element={<PastIdeas />} />
+            <Route
+              path={ROUTES.PAST_IDEAS}
+              element={
+                <ProtectedRoute>
+                  <PastIdeas />
+                </ProtectedRoute>
+              }
+            />
             <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
             <Route
               path={`${ROUTES.VIEW_SEARCHED}`}
               element={<ViewSearchedIdeas />}
             />
-            <Route path={ROUTES.SETTINGS} element={<Settings />} />
+            <Route
+              path={ROUTES.SETTINGS}
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.GET_PLUS} element={<GetPlus />} />
             <Route path={ROUTES.TOS} element={<TermsOfService />} />

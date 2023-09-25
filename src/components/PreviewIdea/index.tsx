@@ -3,7 +3,7 @@ import {
   Button,
   Center,
   Flex,
-  IconButton,
+  Heading,
   Image,
   Modal,
   ModalBody,
@@ -15,8 +15,8 @@ import {
   Text,
   useBreakpointValue,
   useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react'
-import { FaEdit } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import LikeButton from '../LikeButton'
@@ -69,7 +69,7 @@ export default function PreviewIdea({
                 fallbackStrategy="onError"
               />
               <Flex
-                px="4"
+                px="2"
                 py="2"
                 align="center"
                 justify="space-between"
@@ -78,24 +78,41 @@ export default function PreviewIdea({
                 <VoteButton ideaId={idea.id} votes={idea.votes} idea={idea} />
 
                 <Flex align="center">
-                  <IconButton
+                  {/* <IconButton
                     aria-label="Share"
                     variant="ghost"
                     icon={<FaEdit />}
                     onClick={() => {
                       navigate(`${ROUTES.VIEW}/${idea.id}`)
                     }}
-                  ></IconButton>
-                  <ShareButton url={idea.url} />
+                  ></IconButton> */}
+                  <ShareButton
+                    url={`${window.location.protocol}//${window.location.host}${ROUTES.VIEW}/${idea.id}`}
+                  />
                   <LikeButton ideaId={idea.id} />
-                  {/* <Text ml={1}>
+                  <Text ml={1}>
                     {idea.created_at &&
                       new Date(
                         idea.created_at.seconds * 1000
                       ).toLocaleDateString()}
-                  </Text> */}
+                  </Text>
                 </Flex>
               </Flex>
+              <Heading marginTop="1" size="lg" px={2}>
+                <Text textDecoration="none" maxWidth="100%">
+                  {idea.title}
+                </Text>
+              </Heading>
+              <Text
+                px={2}
+                as="p"
+                marginTop="2"
+                color={useColorModeValue('gray.700', 'gray.200')}
+                fontSize="lg"
+                maxWidth="100%"
+              >
+                {idea.description}
+              </Text>
               {idea.tags && <Text>Tags: </Text>}
               {idea.tags && idea.tags.length == 0 ? (
                 <Text>No Tags </Text>
@@ -117,7 +134,13 @@ export default function PreviewIdea({
           </Center>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onClose}>Close</Button>
+          <Button
+            onClick={() => {
+              navigate(`${ROUTES.VIEW}/${idea.id}`)
+            }}
+          >
+            View Full
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -38,6 +38,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     location.pathname == ROUTES.SEARCH
 
   const [gallerySort, setGallerySort] = useRecoilState(gallerySortAtom)
+
   const [likedSort, setLikedSort] = useRecoilState(likedSortAtom)
   const theme = useRecoilValue(themeSelector)
 
@@ -55,20 +56,18 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   }
 
   const getSortValue = () => {
-    if (location.pathname == ROUTES.GALLERY) {
-      return gallerySort
-    } else {
-      // assumes location.pathname == ROUTES.LIKED
+    if (location.pathname == ROUTES.LIKED) {
       return likedSort
+    } else {
+      return gallerySort
     }
   }
 
   const getSortHandler = () => {
-    if (location.pathname == ROUTES.GALLERY) {
-      return setGallerySort
-    } else {
-      // assumes location.pathname == ROUTES.LIKED
+    if (location.pathname == ROUTES.LIKED) {
       return setLikedSort
+    } else {
+      return setGallerySort
     }
   }
 
