@@ -18,7 +18,7 @@ interface ContentProps {
 
 const Content = ({ sections }: ContentProps) => {
   return (
-    <Stack direction={"column"} h={'full'} overflow={"auto"} w={"full"} scrollBehavior={"smooth"}>
+    <Stack p={5} direction={"column"} h={'full'} overflow={"auto"} w={"full"} scrollBehavior={"smooth"}>
       {sections.map(section => {
         return (
           <>

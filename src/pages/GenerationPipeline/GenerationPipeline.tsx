@@ -249,7 +249,7 @@ const GenerationPipeline = () => {
           />
         </div>
         <Heading mb={3}>Generated Content</Heading>
-        <div style={{ padding: "10px", height: "60%", backgroundColor: useColorModeValue('#ffffff', '#111111') }}>
+        <div style={{ borderRadius: 10, height: "60%", backgroundColor: useColorModeValue('#ffffff', '#171c20') }}>
             <Stack direction={"row"} height={"100%"}>
                 <ContentSidebar/>
                 <Content sections={sections}/>
