@@ -21,6 +21,7 @@ import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
 import ViewSearchedIdeas from './pages/ViewSearchedIdeas'
 import IdeaGeneration from './pages/IdeaGeneration'
+import GenerationPipeline from './pages/GenerationPipeline/GenerationPipeline'
 
 export const App = () => (
   <>
@@ -32,6 +33,7 @@ export const App = () => (
             <Route path={ROUTES.SEARCH} element={<Search />} />
             <Route path={ROUTES.GALLERY} element={<Gallery />} />
             <Route path={ROUTES.IDEA_GENERATION} element={<IdeaGeneration />} />
+            <Route path={ROUTES.GENERATION_PIPELINE} element={<GenerationPipeline />} />
             <Route
               path={ROUTES.LIKED}
               element={
