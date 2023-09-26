@@ -1,7 +1,11 @@
-import { CircularProgress, Container, useColorModeValue } from '@chakra-ui/react'
+import { CircularProgress, Container, Heading, Stack, useColorModeValue } from '@chakra-ui/react'
 import Flowchart from 'flowchart-react'
 import { useEffect, useState } from 'react'
 import { NAVBAR_HEIGHT } from '../../constants'
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
+import ContentSidebar from './ContentSidebar'
+import Content, { ContentSection, Contents } from './Content'
+import LinkItems from './Sections'
 
 const GenerationPipeline = () => {
   const COMPLETED_COLOR = '#41B741'
@@ -214,6 +218,20 @@ const GenerationPipeline = () => {
     setConns(newConns)
   }, [currentNodeId])
 
+  const sections: Contents[] = LinkItems.map(li => {
+    return {
+        title: li.title,
+        id: li.href.slice(1),
+        sections: li.sublinks.map(sublink => {
+            return {
+                title: sublink.name,
+                id: sublink.href.slice(1),
+                content: "test content",
+            }
+        })
+    }
+  })
+
   return (
     <>
       <Container maxW={'5xl'} h={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
@@ -221,15 +239,21 @@ const GenerationPipeline = () => {
           style={{
             width: '100%',
             height: '30%',
-            color: useColorModeValue('white', 'black'),
+            color: "black",
           }}
         >
           <Flowchart
             readonly={true}
-            style={{ width: '100%', height: 200 }}
             nodes={nodes}
             connections={conns}
           />
+        </div>
+        <Heading mb={3}>Generated Content</Heading>
+        <div style={{ padding: "10px", height: "60%", backgroundColor: useColorModeValue('#ffffff', '#111111') }}>
+            <Stack direction={"row"} height={"100%"}>
+                <ContentSidebar/>
+                <Content sections={sections}/>
+            </Stack>
         </div>
       </Container>
     </>
