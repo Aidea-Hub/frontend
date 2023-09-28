@@ -42,7 +42,7 @@ export const ROUTES = {
   PRIVACY: '/privacy-policy',
   COOKIES: '/cookie-policy',
   IDEA_GENERATION: "/idea-generation",
-  GENERATION_PIPELINE: "/generation-pipeline",
+  FULL_IDEA: "/full-idea/:ideaContentId",
   NOT_FOUND: '/not-found',
 }
 

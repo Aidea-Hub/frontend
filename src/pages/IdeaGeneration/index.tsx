@@ -19,15 +19,17 @@ import PreviewIdea from '../../components/PreviewIdea'
 import firebase from '../../config/firebase'
 import { Idea, NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { themeSelector } from '../../recoil/selectors'
+import { collection, doc, getDoc, setDoc, getFirestore, onSnapshot } from 'firebase/firestore'
 
 const analytics = getAnalytics(firebase)
 
 const IdeaGeneration = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const selectIdea = (id: any) => {
-    setSelectedPost(id)
+  const [selectedPost, setSelectedPost] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const selectIdea = (content: any) => {
+    setSelectedPost(content)
   }
 
   const ideas: Idea[] = [
@@ -87,6 +89,7 @@ const IdeaGeneration = () => {
   const theme = useRecoilValue(themeSelector)
   const { state } = useLocation()
   const { problem } = state
+  const db = getFirestore(firebase)
 
   useEffect(() => {
     if (isLoading) {
@@ -111,13 +114,16 @@ const IdeaGeneration = () => {
   }
 
   const navigate = useNavigate();
-  const generateIdeaContent = () => {
+  const generateIdeaContent = async () => {
     // check if user selected anything
     if (selectedPost === null) {
         return;
     }
-    // TODO: process selectedPost into some data structure that can be used by the generation pipeline
-    navigate(ROUTES.GENERATION_PIPELINE, { state: { selected: selectedPost }});
+
+    // TODO: call endpoint and pass idea_id to new page
+    const id = "1IBGU9seKqWsF5Sg6J0Z";
+
+    navigate(`${ROUTES.FULL_IDEA}\\${id}`);
   }
 
   return (
@@ -193,7 +199,7 @@ const IdeaGeneration = () => {
               <IdeaCard
                 key={post.id}
                 idea={post}
-                onIdeaClick={() => selectIdea(post.id)}
+                onIdeaClick={() => selectIdea(post)}
                 selected={post.id === selectedPost}
                 isGeneratedIdea={true}
               />
