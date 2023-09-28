@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { getAnalytics, logEvent } from 'firebase/analytics'
@@ -17,13 +18,34 @@ import firebase from '../../config/firebase'
 import { themeSelector } from '../../recoil/selectors'
 import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { useNavigate } from 'react-router-dom'
+import BadWordsNext from "bad-words-next"
+import en from 'bad-words-next/data/en.json'
 
 const analytics = getAnalytics(firebase)
 
 export default function Home() {
+  const badWords = new BadWordsNext({ data: en });
+  const toast = useToast();
   const [problem, setProblem] = useState<string>("")
   const theme = useRecoilValue(themeSelector)
   const navigate = useNavigate();
+
+  const startGenerate = () => {
+    if (badWords.check(problem)) {
+      toast({
+        title: 'Profanities detected!.',
+        description: "Profanities were detected in your input. Please help our community to keep this platform clean.",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+      return
+    }
+
+    if (problem) {
+      navigate(ROUTES.IDEA_GENERATION, { state: { problem: problem } })
+    }
+  } 
 
   return (
     <>
@@ -57,7 +79,7 @@ export default function Home() {
             </Text>
             <Input onChange={(e) => setProblem(e.target.value)} placeholder='Please describe the problem you want to solve, e.g. I hate waiting in lines at the hospital'></Input>
           </Stack>
-          <Button isDisabled={!problem} justifySelf={"center"} width={"40"} colorScheme={problem ? theme : "gray"} onClick={() => problem && navigate(ROUTES.IDEA_GENERATION, { state: { problem: problem } })}>Generate!</Button>
+          <Button isDisabled={!problem} justifySelf={"center"} width={"40"} colorScheme={problem ? theme : "gray"} onClick={startGenerate}>Generate!</Button>
         </SimpleGrid>
       </Container>
     </>
