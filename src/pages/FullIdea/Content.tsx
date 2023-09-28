@@ -29,16 +29,16 @@ const Content = ({ sections }: ContentProps) => {
       {sections.map(section => {
         return (
           <>
-            <Heading id={section.id} size={'lg'} mb={2}>
+            <Heading key={section.id} id={section.id} size={'lg'} mb={2}>
               {section.title}
             </Heading>
             {section.sections.map(s => {
               return (
                 <>
-                  <Heading id={s.id} size={'md'} mb={1}>
+                  <Heading key={`heading-${s.id}`} id={s.id} size={'md'} mb={1}>
                     {s.title}
                   </Heading>
-                  <Container>{s.content}</Container>
+                  <Container key={`content-${s.id}`} >{s.content}</Container>
                 </>
               )
             })}

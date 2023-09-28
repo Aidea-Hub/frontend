@@ -57,7 +57,7 @@ export default function Home() {
             </Text>
             <Input onChange={(e) => setProblem(e.target.value)} placeholder='Please describe the problem you want to solve, e.g. I hate waiting in lines at the hospital'></Input>
           </Stack>
-          <Button justifySelf={"center"} width={"40"} colorScheme={theme} onClick={() => navigate(ROUTES.IDEA_GENERATION, { state: { problem: problem } })}>Generate!</Button>
+          <Button isDisabled={!problem} justifySelf={"center"} width={"40"} colorScheme={problem ? theme : "gray"} onClick={() => problem && navigate(ROUTES.IDEA_GENERATION, { state: { problem: problem } })}>Generate!</Button>
         </SimpleGrid>
       </Container>
     </>

@@ -27,12 +27,14 @@ interface PreviewIdeaProps {
   isOpen: boolean
   onClose: any
   post: any
+  isGeneratedIdea?: boolean,
 }
 
 export default function PreviewIdea({
   isOpen,
   onClose,
   post: idea,
+  isGeneratedIdea,
 }: PreviewIdeaProps) {
   const size = useBreakpointValue({ base: 'md', md: 'xl' })
   const { colorMode } = useColorMode()
@@ -56,7 +58,7 @@ export default function PreviewIdea({
         <ModalBody>
           <Center>
             <Stack mt={10} maxWidth={512}>
-              <Image
+              {!isGeneratedIdea && <Image
                 rounded={'md'}
                 src={idea.url}
                 maxH={512}
@@ -67,8 +69,8 @@ export default function PreviewIdea({
                   colorMode === 'light' ? 'FED7D7' : 'C53030'
                 }.png&text=Idea+removed+or+does+not+exist`}
                 fallbackStrategy="onError"
-              />
-              <Flex
+              />}
+              {!isGeneratedIdea && <Flex
                 px="2"
                 py="2"
                 align="center"
@@ -97,7 +99,7 @@ export default function PreviewIdea({
                       ).toLocaleDateString()}
                   </Text>
                 </Flex>
-              </Flex>
+              </Flex>}
               <Heading marginTop="1" size="lg" px={2}>
                 <Text textDecoration="none" maxWidth="100%">
                   {idea.title}
@@ -113,8 +115,8 @@ export default function PreviewIdea({
               >
                 {idea.description}
               </Text>
-              {idea.tags && <Text>Tags: </Text>}
-              {idea.tags && idea.tags.length == 0 ? (
+              {!isGeneratedIdea && idea.tags && <Text>Tags: </Text>}
+              {!isGeneratedIdea && (idea.tags && idea.tags.length == 0 ? (
                 <Text>No Tags </Text>
               ) : (
                 <>
@@ -129,18 +131,18 @@ export default function PreviewIdea({
                     />
                   )}
                 </>
-              )}
+              ))}
             </Stack>
           </Center>
         </ModalBody>
         <ModalFooter>
-          <Button
+          {!isGeneratedIdea && <Button
             onClick={() => {
               navigate(`${ROUTES.VIEW}/${idea.id}`)
             }}
           >
             View Full
-          </Button>
+          </Button>}
         </ModalFooter>
       </ModalContent>
     </Modal>

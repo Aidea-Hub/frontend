@@ -43,6 +43,7 @@ export const ROUTES = {
   COOKIES: '/cookie-policy',
   IDEA_GENERATION: "/idea-generation",
   FULL_IDEA: "/full-idea/:ideaContentId",
+  FULL_IDEA_BASE: "/full-idea",
   NOT_FOUND: '/not-found',
 }
 

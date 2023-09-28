@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Heading,
   Image as Img,
@@ -14,6 +15,8 @@ import { userAtom } from '../../recoil/atoms'
 import LikeButton from '../LikeButton'
 import VoteButton from '../VoteButton'
 import { themeSelector } from '../../recoil/selectors'
+import PreviewIdea from '../PreviewIdea'
+import { useState } from 'react'
 
 const MotionImg = motion(Img)
 
@@ -26,6 +29,7 @@ interface IdeaCardProps {
 }
 
 export default function IdeaCard({ idea, onIdeaClick, selected = false, isGeneratedIdea = false }: IdeaCardProps) {
+  const [isOpen, setIsOpen] = useState(false)
   const cardColor = useColorModeValue('gray.100', 'gray.700')
   const user = useRecoilValue(userAtom)
   const { colorMode } = useColorMode()
@@ -51,7 +55,7 @@ export default function IdeaCard({ idea, onIdeaClick, selected = false, isGenera
       onClick={() => onIdeaClick(idea)}
       cursor="pointer"
     >
-      <Box h="240px" position="relative" overflow="hidden">
+      {!isGeneratedIdea && <Box h="240px" position="relative" overflow="hidden">
         <MotionImg
           transition={{ duration: 0.3 }}
           whileHover={{ scale: 1.1 }}
@@ -69,7 +73,7 @@ export default function IdeaCard({ idea, onIdeaClick, selected = false, isGenera
           }}
           fallbackStrategy="onError"
         />
-      </Box>
+      </Box>}
       <Box p={4} h={150}>
         <Heading marginTop="1" size="md" noOfLines={2}>
           <Text textDecoration="none" maxWidth="100%">
@@ -82,10 +86,11 @@ export default function IdeaCard({ idea, onIdeaClick, selected = false, isGenera
           color={useColorModeValue('gray.700', 'gray.200')}
           fontSize="md"
           maxWidth="100%"
-          noOfLines={3}
+          noOfLines={isGeneratedIdea ? 10 : 3}
         >
           {idea.description}
         </Text>
+        {isGeneratedIdea && <Button mt={2} onClick={() => setIsOpen(true)}>Expand</Button>}
       </Box>
       {!isGeneratedIdea && <Flex px="4" py="2" align="center" justify="space-between" w="100%">
         <VoteButton ideaId={idea.id} />
@@ -97,6 +102,7 @@ export default function IdeaCard({ idea, onIdeaClick, selected = false, isGenera
           </Text>
         </Flex>
       </Flex>}
+      {selected && isGeneratedIdea && isOpen && <PreviewIdea isOpen={isOpen} onClose={() => setIsOpen(false)} post={idea} isGeneratedIdea={isGeneratedIdea}/>}
     </Box>
   )
 }

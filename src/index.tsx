@@ -24,7 +24,6 @@ if (process.env.NODE_ENV === 'production') {
 
 root.render(
   // <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}>
-  <React.StrictMode>
     <HelmetProvider>
       <ColorModeScript initialColorMode={myTheme.config.initialColorMode} />
       <ChakraProvider theme={myTheme}>
@@ -37,7 +36,6 @@ root.render(
         </BrowserRouter>
       </ChakraProvider>
     </HelmetProvider>
-  </React.StrictMode>
   // </GoogleOAuthProvider>
 )
 
