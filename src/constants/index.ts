@@ -27,6 +27,7 @@ export const REQUEST_TYPES = {
 
 export const ROUTES = {
   HOME: '/',
+  LANDING: '/landing',
   GALLERY: '/gallery',
   LOGIN: '/login',
   LIKED: '/liked',

@@ -20,6 +20,7 @@ import Search from './pages/Search'
 import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
 import ViewSearchedIdeas from './pages/ViewSearchedIdeas'
+import Landing from './pages/Landing'
 
 export const App = () => (
   <>
@@ -28,6 +29,7 @@ export const App = () => (
         <ScrollToTop>
           <Routes>
             <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.LANDING} element={<Landing />} />
             <Route path={ROUTES.SEARCH} element={<Search />} />
             <Route path={ROUTES.GALLERY} element={<Gallery />} />
             <Route
