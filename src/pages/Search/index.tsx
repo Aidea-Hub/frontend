@@ -1,4 +1,4 @@
-import { SearchIcon } from '@chakra-ui/icons'
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -9,6 +9,8 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
+  Link,
   SimpleGrid,
   Spacer,
   Text,
@@ -29,6 +31,7 @@ import {
 import keywordExtractor from 'keyword-extractor'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
+import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { stemmer } from 'stemmer'
 import Header from '../../components/Head'
@@ -36,6 +39,7 @@ import IdeaCard from '../../components/IdeaCard'
 import PreviewIdea from '../../components/PreviewIdea'
 import PulsingDot from '../../components/PulsingDot'
 import firebase from '../../config/firebase'
+import { ROUTES } from '../../constants'
 import { gallerySortAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
@@ -57,7 +61,9 @@ const Gallery = () => {
   const [ideas, setIdeas] = useState<any[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const [isLoading, setLoading] = useState(true)
+  const [isEmpty, setEmpty] = useState(true)
   const gallerySort = useRecoilValue(gallerySortAtom)
+  const navigate = useNavigate()
 
   const theme = useRecoilValue(themeSelector)
 
@@ -74,6 +80,8 @@ const Gallery = () => {
     if (extractedKeywords.length > 0) {
       setKeyword(stemmer(extractedKeywords[0]))
       console.log(keyword)
+    } else {
+      setKeyword(value)
     }
   }
 
@@ -118,6 +126,8 @@ const Gallery = () => {
     if (ideasDocs.length > 0) {
       setLastVisible(ideasDocs[ideasDocs.length - 1])
     }
+
+    setEmpty(newIdeas.length == 0)
 
     setHasNextPage(newIdeas.length == PAGE_LIMIT)
 
@@ -186,6 +196,15 @@ const Gallery = () => {
                         onChange={event => setValue(event.target.value)}
                         placeholder="Search for ideas"
                       />
+                      <InputRightElement>
+                        <CloseIcon
+                          fontSize="sm"
+                          onClick={() => {
+                            setValue('')
+                            setKeyword('')
+                          }}
+                        />
+                      </InputRightElement>
                     </InputGroup>
                     <Spacer mx={2} />
                     <Button onClick={handleSubmit} colorScheme={`${theme}`}>
@@ -194,6 +213,39 @@ const Gallery = () => {
                   </Flex>
                 </Center>
               </Box>
+              {isEmpty && (
+                <Box textAlign="center" py={10} px={6}>
+                  <Box display="inline-block">
+                    <Flex
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      bg={`${theme}.500`}
+                      rounded={'50px'}
+                      w={'55px'}
+                      h={'55px'}
+                      textAlign="center"
+                    >
+                      <SearchIcon boxSize={'30px'} color={'white'} />
+                    </Flex>
+                  </Box>
+
+                  <Heading as="h2" size="xl" mt={6} mb={2}>
+                    No Search results found
+                  </Heading>
+                  <Text color={'gray.500'}>
+                    Try using different keywords, or be the first to generate a
+                    similar idea yourself{' '}
+                    <Link
+                      color={`${theme}.500`}
+                      onClick={() => navigate(ROUTES.HOME)}
+                    >
+                      here
+                    </Link>
+                    💡
+                  </Text>
+                </Box>
+              )}
               <InfiniteScroll
                 hasMore={hasNextPage}
                 loadMore={fetchNextPage}

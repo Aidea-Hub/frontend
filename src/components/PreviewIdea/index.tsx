@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Box,
   Button,
   Center,
   Flex,
   Heading,
+  Icon,
+  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -17,9 +20,18 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { collection, doc, getDoc, getFirestore } from 'firebase/firestore'
+import { useState } from 'react'
+import { FiRefreshCcw } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import authApi from '../../api/authApi'
+import firebase from '../../config/firebase'
 import { ROUTES } from '../../constants'
+import { userAtom } from '../../recoil/atoms'
+import { themeSelector } from '../../recoil/selectors'
 import LikeButton from '../LikeButton'
+import PulsingDot from '../PulsingDot'
 import SelectedTagList from '../SelectedTagList'
 import ShareButton from '../ShareButton'
 import VoteButton from '../VoteButton'
@@ -28,6 +40,7 @@ interface PreviewIdeaProps {
   onClose: any
   post: any
 }
+const db = getFirestore(firebase)
 
 export default function PreviewIdea({
   isOpen,
@@ -36,10 +49,23 @@ export default function PreviewIdea({
 }: PreviewIdeaProps) {
   const size = useBreakpointValue({ base: 'md', md: 'xl' })
   const { colorMode } = useColorMode()
+  const [isLoading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const user = useRecoilValue(userAtom)
+  const theme = useRecoilValue(themeSelector)
 
-  // TODO change to tags length
-  //const ideaMarginTop = !post.awards.length ? 3 : 0
+  const handleRegenerateClick = async () => {
+    setLoading(true)
+    await authApi.post('/generateNewIdeaImage', {
+      ideaId: idea.id,
+      userId: user.uid,
+    })
+    const ideasRef = collection(db, 'ideas')
+
+    const updatedIdea = await getDoc(doc(ideasRef, idea.id))
+    idea.url = updatedIdea.data()!.url
+    setLoading(false)
+  }
 
   return (
     <Modal
@@ -56,18 +82,55 @@ export default function PreviewIdea({
         <ModalBody>
           <Center>
             <Stack mt={10} maxWidth={512}>
-              <Image
-                rounded={'md'}
-                src={idea.url}
-                maxH={512}
-                objectFit="contain"
-                fallbackSrc={`https://dummyidea.com/${512}x${768}/${
-                  colorMode === 'light' ? 'aaa' : 'fff'
-                }/${
-                  colorMode === 'light' ? 'FED7D7' : 'C53030'
-                }.png&text=Idea+removed+or+does+not+exist`}
-                fallbackStrategy="onError"
-              />
+              <Box position="relative">
+                <Image
+                  rounded={'md'}
+                  src={idea.url}
+                  maxH={512}
+                  objectFit="contain"
+                  fallbackSrc={`https://dummyidea.com/${512}x${768}/${
+                    colorMode === 'light' ? 'aaa' : 'fff'
+                  }/${
+                    colorMode === 'light' ? 'FED7D7' : 'C53030'
+                  }.png&text=Idea+removed+or+does+not+exist`}
+                  fallbackStrategy="onError"
+                />
+                {isLoading && (
+                  <>
+                    <Center
+                      position="absolute"
+                      top={0}
+                      right={0}
+                      bottom={0}
+                      left={0}
+                    >
+                      <PulsingDot />
+                    </Center>
+                    <Box
+                      position="absolute"
+                      top={0}
+                      right={0}
+                      bottom={0}
+                      left={0}
+                      bgColor="rgba(0, 0, 0, 0.4)" // Semi-transparent gray
+                    ></Box>
+                  </>
+                )}
+                {user.uid === idea.user_id && (
+                  <IconButton
+                    aria-label="regenerate image"
+                    position="absolute"
+                    bottom={2}
+                    right={2}
+                    icon={<Icon as={FiRefreshCcw} />}
+                    isRound={true}
+                    colorScheme={`${theme}`}
+                    onClick={handleRegenerateClick}
+                  >
+                    Regenerate
+                  </IconButton>
+                )}
+              </Box>
               <Flex
                 px="2"
                 py="2"
@@ -78,14 +141,6 @@ export default function PreviewIdea({
                 <VoteButton ideaId={idea.id} votes={idea.votes} idea={idea} />
 
                 <Flex align="center">
-                  {/* <IconButton
-                    aria-label="Share"
-                    variant="ghost"
-                    icon={<FaEdit />}
-                    onClick={() => {
-                      navigate(`${ROUTES.VIEW}/${idea.id}`)
-                    }}
-                  ></IconButton> */}
                   <ShareButton
                     url={`${window.location.protocol}//${window.location.host}${ROUTES.VIEW}/${idea.id}`}
                   />
