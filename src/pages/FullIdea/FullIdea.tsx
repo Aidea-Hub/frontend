@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   Container,
   FormControl,
@@ -10,6 +11,7 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 import {
   collection,
   doc,
@@ -30,7 +32,6 @@ import { themeSelector } from '../../recoil/selectors'
 import Content from './Content'
 import ContentSidebar from './ContentSidebar'
 import LinkItems from './Sections'
-import { getAnalytics, logEvent } from 'firebase/analytics'
 
 interface Subsection {
   title: string
@@ -72,8 +73,9 @@ const FullIdea = () => {
   const [sections, setSections] = useState<any[]>(content)
   const [ideaContentId, setIdeaContentId] = useState<string>('')
   const [isPublic, setIsPublic] = useState<boolean>(true)
-  const [image, setImage] = useState<string>("")
+  const [image, setImage] = useState<string>('')
   const [userIdeaId, setUserIdeaId] = useState<string>('')
+  const [ideaProblem, setIdeaProblem] = useState<string>('')
   const [isChangingPublic, setIsChangingPublic] = useState<boolean>(false)
   const toast = useToast()
   const navigate = useNavigate()
@@ -93,12 +95,13 @@ const FullIdea = () => {
     onSnapshot(doc(collection(db, 'ideas'), ideaId), snapshot => {
       const data = snapshot.data()
       if (!data) {
-        navigate(ROUTES.NOT_FOUND);
+        navigate(ROUTES.NOT_FOUND)
         return
       }
       setIsPublic(data.isPublic)
       setImage(data.url)
       setUserIdeaId(data.user_id)
+      setIdeaProblem(data.problem)
     })
   }, [])
 
@@ -196,9 +199,18 @@ const FullIdea = () => {
             isDisabled={isChangingPublic}
             colorScheme={theme}
             isChecked={!isPublic}
-            onChange={(e) => setVisbilility(!e.target.checked)}
+            onChange={e => setVisbilility(!e.target.checked)}
           />
         </FormControl>
+        {ideaProblem && <Box
+         my={3}
+         backgroundColor={`${useColorModeValue("black", "white")}Alpha.200`}
+         p={5}
+         borderRadius={20}
+        >
+          <Heading size={"xs"}>Problem from user:</Heading>
+          <Text>{ideaProblem}</Text>
+        </Box>}
         <div
           style={{
             marginTop: '10px',
@@ -209,7 +221,12 @@ const FullIdea = () => {
         >
           <Stack direction={'row'} height={'100%'}>
             <ContentSidebar />
-            <Content sections={sections} ideaId={ideaId ?? ""} imageUrl={image} ideaUserId={userIdeaId}/>
+            <Content
+              sections={sections}
+              ideaId={ideaId ?? ''}
+              imageUrl={image}
+              ideaUserId={userIdeaId}
+            />
           </Stack>
         </div>
       </Container>

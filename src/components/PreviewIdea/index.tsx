@@ -144,7 +144,7 @@ export default function PreviewIdea({
 
                 <Flex align="center">
                   <ShareButton
-                    url={`${window.location.protocol}//${window.location.host}${ROUTES.VIEW}/${idea.id}`}
+                    url={`${window.location.protocol}//${window.location.host}${ROUTES.FULL_IDEA_BASE}/${idea.id}`}
                   />
                   <LikeButton ideaId={idea.id} />
                   <Text ml={1}>

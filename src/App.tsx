@@ -90,7 +90,6 @@ export const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
               <Route
                 path={ROUTES.SETTINGS}
                 element={

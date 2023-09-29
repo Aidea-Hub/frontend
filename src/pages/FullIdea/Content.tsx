@@ -45,9 +45,6 @@ const Content = ({ sections, ideaId, imageUrl, ideaUserId }: ContentProps) => {
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
   const [image, setImage] = useState<string>(imageUrl)
 
-  console.log('image :>> ', image);
-  console.log('imageUrl :>> ', imageUrl);
-
   const handleRegenerateClick = async () => {
     setIsImageLoading(true)
     await authApi.post('/generateNewIdeaImage', {

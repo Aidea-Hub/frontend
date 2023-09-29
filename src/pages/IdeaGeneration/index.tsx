@@ -139,6 +139,7 @@ const IdeaGeneration = () => {
           userId: user.uid,
           title: selectedPost.title,
           description: selectedPost.description,
+          problem: problem,
         }
       )
       .then(res => {
