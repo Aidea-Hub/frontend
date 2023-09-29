@@ -23,6 +23,7 @@ interface Props {
 
 function PriceWrapper(props: Props) {
   const { children } = props
+  
 
   return (
     <Box
@@ -39,6 +40,7 @@ function PriceWrapper(props: Props) {
 
 export function Pricing() {
   const theme = useRecoilValue(themeSelector)
+  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_DEV_URL + "createCheckoutSession"
   return (
     <Box py={12}>
       <VStack spacing={2} textAlign="center">
@@ -122,10 +124,13 @@ export function Pricing() {
                   My eternal gratitude
                 </ListItem>
               </List>
+              
               <Box w="80%" pt={7}>
-                <Button w="full" bg={'#d69e2e'} >
-                  Buy Now!
-                </Button>
+                <form action={stripe_link} method="POST">
+                  <Button w="full" bg={'#d69e2e'} type="submit">
+                    Buy Now!
+                  </Button>
+                </form>
               </Box>
             </VStack>
           </Box>
