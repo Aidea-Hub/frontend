@@ -1,6 +1,5 @@
 import { Box, useColorMode } from '@chakra-ui/react'
 import { Route, Routes } from 'react-router-dom'
-
 import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'

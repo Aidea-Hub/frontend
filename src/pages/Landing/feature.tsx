@@ -35,11 +35,6 @@ const features = [
     id: 2,
     title: "Idea Inspiration & Sharing",
     text: "Aidea Hub fosters creativity with idea sharing and a voting system for popular concepts.",
-  },
-  {
-    id: 3,
-    title: "Comprehensive Project Ideation Milestones",
-    text: "Aidea Hub offers a comprehensive results covering all the essential milestones: foundation, moat, marketing, etc.",
   }
 ]
 
@@ -56,7 +51,7 @@ export function Feature() {
       </Stack>
 
       <Container maxW={'6xl'} mt={10}>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={10}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
           {features.map((feature) => (
             <HStack key={feature.id} align={'top'}>
               <Box color={'green.400'} px={2}>
