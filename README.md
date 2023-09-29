@@ -52,7 +52,7 @@ cd frontend
 npm run start
 ```
 
-### Resources used/referred ti
+### Resources used/referred to
 
 - [Chakra UI](https://chakra-ui.com/)
 - [Chakra Templates](https://chakra-templates.dev/)
