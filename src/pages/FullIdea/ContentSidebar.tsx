@@ -27,6 +27,8 @@ import {
 } from 'react-icons/fi'
 import { FcIdea } from "react-icons/fc";
 import LinkItems from './Sections'
+import { useRecoilValue } from 'recoil'
+import { themeSelector } from '../../recoil/selectors'
 
 export default function ContentSidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -92,6 +94,7 @@ interface NavItemProps extends FlexProps {
   href: string
 }
 const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
+  const theme = useRecoilValue(themeSelector)
   return (
     <Box
       as="a"
@@ -107,7 +110,7 @@ const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: `${theme}.400`,
           color: 'white',
         }}
         {...rest}
