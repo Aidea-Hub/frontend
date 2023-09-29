@@ -1,5 +1,7 @@
 import { Timestamp } from 'firebase/firestore'
 
+export const NAVBAR_HEIGHT = 200; //px
+
 export const getCDNUrl = (ideaId: string) => {
   return 'https://picsum.photos/seed/' + ideaId + '/400/600'
 }
@@ -39,6 +41,9 @@ export const ROUTES = {
   TOS: '/terms-of-service',
   PRIVACY: '/privacy-policy',
   COOKIES: '/cookie-policy',
+  IDEA_GENERATION: "/idea-generation",
+  FULL_IDEA: "/full-idea/:ideaId",
+  FULL_IDEA_BASE: "/full-idea",
   NOT_FOUND: '/not-found',
   SUCCESS: '/success',
   FAIL: '/fail'

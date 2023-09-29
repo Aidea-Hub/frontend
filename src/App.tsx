@@ -22,6 +22,8 @@ import PastIdeas from './pages/PastIdeas'
 import Search from './pages/Search'
 import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
+import IdeaGeneration from './pages/IdeaGeneration'
+import FullIdea from './pages/FullIdea/FullIdea'
 import Landing from './pages/Landing'
 import { colorModeState } from './recoil/atoms'
 import { Success, Fail } from './pages/Payment'
@@ -55,6 +57,20 @@ export const App = () => {
               <Route path={ROUTES.LANDING} element={<Landing />} />
               <Route path={ROUTES.SEARCH} element={<Search />} />
               <Route path={ROUTES.GALLERY} element={<Gallery />} />
+              <Route 
+              path={ROUTES.IDEA_GENERATION} 
+              element={
+                <ProtectedRoute>
+                  <IdeaGeneration />
+                </ProtectedRoute>
+              } />
+              <Route
+              path={ROUTES.FULL_IDEA} 
+              element={
+                <ProtectedRoute>
+                  <FullIdea />
+                </ProtectedRoute>
+              } />
               <Route path={ROUTES.SUCCESS} element={<Success />} />
               <Route path={ROUTES.FAIL} element={<Fail />} />
               <Route
@@ -74,7 +90,6 @@ export const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path={`${ROUTES.VIEW}/:ideaId`} element={<ViewIdea />} />
               <Route
                 path={ROUTES.SETTINGS}
                 element={

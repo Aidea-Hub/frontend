@@ -20,6 +20,9 @@ import {
 } from '@chakra-ui/react'
 import { FaShareAlt } from 'react-icons/fa'
 import {
+  FacebookIcon,
+  FacebookShareButton,
+  FacebookShareCount,
   PocketIcon,
   PocketShareButton,
   RedditIcon,
@@ -27,9 +30,6 @@ import {
   RedditShareCount,
   TelegramIcon,
   TelegramShareButton,
-  TumblrIcon,
-  TumblrShareButton,
-  TumblrShareCount,
   TwitterIcon,
   TwitterShareButton,
   WhatsappIcon,
@@ -89,7 +89,7 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                 </Center>
               </Stack>
               <Stack h={16}>
-                <TumblrShareButton
+                <FacebookShareButton
                   url={url}
                   onClick={() =>
                     logEvent(analytics, 'share_idea', {
@@ -98,12 +98,12 @@ const ShareButton = ({ url }: ShareButtonProps) => {
                     })
                   }
                 >
-                  <TumblrIcon size={32} round />
-                </TumblrShareButton>
+                  <FacebookIcon size={32} round />
+                </FacebookShareButton>
 
-                <TumblrShareCount url={url}>
+                <FacebookShareCount url={url}>
                   {((shareCount: number) => renderCount(shareCount)) as any}
-                </TumblrShareCount>
+                </FacebookShareCount>
               </Stack>
               <Stack h={16}>
                 <TwitterShareButton
