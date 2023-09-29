@@ -26,6 +26,8 @@ import authApi from '../../api/authApi'
 
 const analytics = getAnalytics(firebase)
 
+const ERROR_MSG = "Failed to generate response, please contact us on Discord for assistance.";
+
 const IdeaGeneration = () => {
   const [selectedPost, setSelectedPost] = useState<any>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -260,7 +262,7 @@ const IdeaGeneration = () => {
             </>
           )}
           {!isLoading &&
-            ideas.map((idea: string, idx: number) => {
+            ideas.filter(idea => idea !== ERROR_MSG).map((idea: string, idx: number) => {
               const { title, description } = processIdea(idea)
               const post: Idea = {
                 id: idx.toString(),
