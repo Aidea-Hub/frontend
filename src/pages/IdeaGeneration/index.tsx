@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { getAnalytics } from 'firebase/analytics'
-import { getFirestore, Timestamp } from 'firebase/firestore'
+import { collection, getFirestore, query, Timestamp, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -22,6 +22,7 @@ import firebase from '../../config/firebase'
 import { Idea, NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
+import { set } from 'lodash'
 
 const analytics = getAnalytics(firebase)
 
@@ -41,6 +42,7 @@ const IdeaGeneration = () => {
   const [user, setUser] = useRecoilState(userAtom)
   const [progress, setProgress] = useState(0) // for loading bar
   const [loadingInterval, setLoadingInterval] = useState<NodeJS.Timeout>()
+  const [isCreatingNewIdea, setIsCreatingNewIdea] = useState<boolean>(false)
 
   const INTERVAL_FN = () => {
     if (progress == 99) {
@@ -48,8 +50,8 @@ const IdeaGeneration = () => {
     }
     setProgress(progress => progress + 1)
   }
-  // interval will go to 100 in 75 seconds
-  const INTERVAL_TIME = (1000 * 75) / 100
+  // interval will go to 100 in 90 seconds
+  const INTERVAL_TIME = (1000 * 90) / 100
 
   // prevent user from leaving the page
   useEffect(() => {
@@ -152,10 +154,19 @@ const IdeaGeneration = () => {
       return
     }
 
-    // TODO: call endpoint and pass idea_id to new page
-    const id = 'ybqC51U4OYxzCOQGh4kU'
+    setIsCreatingNewIdea(true)
+    setProgress(0)
+    const interval = setInterval(INTERVAL_FN, INTERVAL_TIME)
+    setLoadingInterval(interval)
 
-    navigate(`${ROUTES.FULL_IDEA_BASE}\\${id}`)
+    // TODO: call endpoint and pass idea_id to new page
+    await axios.post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeaContent', {
+      userId: user.uid,
+      title: selectedPost.title,
+      description: selectedPost.description,
+    }).then((res) => {
+      navigate(`${ROUTES.FULL_IDEA_BASE}\\${res.data.ideaId}`)
+    })    
   }
 
   function processIdea(input: string) {
@@ -190,14 +201,15 @@ const IdeaGeneration = () => {
             textAlign={'center'}
           >
             {isLoading && 'Generating some genius ideas...'}
-            {isLoading && (
+            {isCreatingNewIdea && 'Setting up our genius team to generate your idea for you... You will be redirected to the full idea page shortly!'}
+            {(isLoading || isCreatingNewIdea) && (
               <Progress mt={3} colorScheme={theme} hasStripe value={progress} />
             )}
             {!isLoading &&
               'Select your favourite idea out of the 4, and you can either generate more similar ideas, or you can generate the full idea!'}
           </Heading>
         </Stack>
-        <Stack
+        {(!isLoading && !isCreatingNewIdea) && <Stack
           direction={'row'}
           justifyContent={'space-between'}
           mb={3}
@@ -255,7 +267,7 @@ const IdeaGeneration = () => {
               {'Generate Similar'}
             </Button>
           </Stack>
-        </Stack>
+        </Stack>}
         <SimpleGrid h={'800px'} columns={{ base: 1, md: 2 }} spacing={5} mb={5}>
           {isLoading && (
             <>

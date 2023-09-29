@@ -10,8 +10,11 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
+  query,
+  where,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
@@ -35,7 +38,7 @@ const LoadingPlaceholderContent = () => (
 )
 
 const FullIdea = () => {
-  const { ideaContentId } = useParams()
+  const { ideaId } = useParams()
 
   const content = LinkItems.map(li => {
     return {
@@ -53,12 +56,27 @@ const FullIdea = () => {
   const db = getFirestore(firebase)
 
   const [sections, setSections] = useState<any[]>(content)
+  const [ideaContentId, setIdeaContentId] = useState<string>('')
 
   useEffect(() => {
+    // Create a query against the collection.
+    const ideaContentsRef = collection(db, "idea_contents");
+    const q = query(ideaContentsRef, where("idea_id", "==", ideaId));
+    getDocs(q).then((querySnapshot) => {
+      const icId = querySnapshot.docs[0].id;
+      setIdeaContentId(icId)
+    });
+  }, [])
+
+  useEffect(() => {
+    if (!ideaContentId) {
+      return
+    }
     onSnapshot(
       doc(collection(db, 'idea_contents'), ideaContentId),
       snapshot => {
         const data = snapshot.data()
+        console.log('data :>> ', data);
         if (!data) return
         const idea = data.title + " - " + data.description
         const newSections = sections.map(section => {
@@ -87,7 +105,7 @@ const FullIdea = () => {
         setSections(newSections)
       }
     )
-  }, [])
+  }, [ideaContentId])
 
   return (
     <>
