@@ -191,7 +191,7 @@ const FullIdea = () => {
     <>
       <Container maxW={'5xl'} h={`calc(100vh - ${NAVBAR_HEIGHT + 10}px)`} minH={"600px"}>
         <Heading mb={3}>Full Idea</Heading>
-        <FormControl display="flex" alignItems="center">
+        {userIdeaId === user.uid && user.is_plus && <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="email-alerts" mb="0">
             Set idea as private?
           </FormLabel>
@@ -202,7 +202,7 @@ const FullIdea = () => {
             isChecked={!isPublic}
             onChange={e => setVisbilility(!e.target.checked)}
           />
-        </FormControl>
+        </FormControl>}
         {ideaProblem && <Box
          my={3}
          backgroundColor={`${useColorModeValue("black", "white")}Alpha.200`}
