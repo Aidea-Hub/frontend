@@ -1,31 +1,31 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   Container,
   Heading,
+  Progress,
   SimpleGrid,
   Skeleton,
   Stack,
   Text,
   useColorModeValue,
-  useDisclosure,
 } from '@chakra-ui/react'
+import axios from 'axios'
 import { getAnalytics } from 'firebase/analytics'
 import { getFirestore, Timestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import IdeaCard from '../../components/IdeaCard'
-import PreviewIdea from '../../components/PreviewIdea'
 import firebase from '../../config/firebase'
 import { Idea, NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
-import axios from 'axios'
 
 const analytics = getAnalytics(firebase)
 
 const IdeaGeneration = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedPost, setSelectedPost] = useState<any>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -38,20 +38,46 @@ const IdeaGeneration = () => {
   const { state } = useLocation()
   const { problem } = state
   const db = getFirestore(firebase)
-
   const [user, setUser] = useRecoilState(userAtom)
+  const [progress, setProgress] = useState(0) // for loading bar
+  const [loadingInterval, setLoadingInterval] = useState<NodeJS.Timeout>()
+
+  const INTERVAL_FN = () => {
+    if (progress == 99) {
+      return
+    }
+    setProgress(progress => progress + 1)
+  }
+  // interval will go to 100 in 75 seconds
+  const INTERVAL_TIME = (1000 * 75) / 100
+
+  // prevent user from leaving the page
+  useEffect(() => {
+    const unloadCallback = (event: any) => {
+      event.preventDefault()
+      event.returnValue = ''
+      return ''
+    }
+
+    window.addEventListener('beforeunload', unloadCallback)
+    return () => window.removeEventListener('beforeunload', unloadCallback)
+  }, [])
 
   useEffect(() => {
-    console.log('problem :>> ', problem)
+    resetLoading()
+
+    //   console.log('problem :>> ', problem)
     // initial load, generate the 4 ideas
-    axios.post("https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas", {
-      userId: user.uid,
-      problem
-    }).then((res) => {
-      console.log('res.data.data :>> ', res.data.data);
-      setIdeas(res.data.data.ideas)
-      setIsLoading(false)
-    })
+    axios
+      .post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas', {
+        userId: user.uid,
+        problem,
+      })
+      .then(res => {
+        console.log('res.data.data :>> ', res.data.data)
+        setIdeas(res.data.data.ideas)
+        setIsLoading(false)
+      })
     // setTimeout(() => {
     //   console.log('This will run after 60 second!')
     //   setIsLoading(false)
@@ -62,13 +88,29 @@ const IdeaGeneration = () => {
     //     'Idea dasdafjkljfklsd: test 3: description',
     //   ])
     // }, 1000)
+
+    return () => {
+      clearInterval(loadingInterval)
+    }
   }, [])
+
+  const resetLoading = () => {
+    setIsLoading(true)
+    const interval = setInterval(INTERVAL_FN, INTERVAL_TIME)
+    setLoadingInterval(interval)
+    setProgress(0)
+  }
 
   useEffect(() => {
     if (isLoading) {
       // Make API call to get ideas
       // set ideas
       // setIsLoading(false)
+    } else {
+      // clear interval
+      if (loadingInterval) {
+        clearInterval(loadingInterval)
+      }
     }
   }, [isLoading])
 
@@ -78,21 +120,32 @@ const IdeaGeneration = () => {
       return
     }
 
-    setIsLoading(true)
-    axios.post("https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas", {
-      userId: user.uid,
-      problem,
-      numIdeas: 3,
-    }).then((res) => {
-      const oldSelected = selectedPost.title + ": " + selectedPost.description
-      setIdeas([oldSelected, ...res.data.data.ideas])
-      setSelectedPost(null)
-      setIsLoading(false)
-    })
+    resetLoading()
+    axios
+      .post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas', {
+        userId: user.uid,
+        problem,
+        numIdeas: 3,
+      })
+      .then(res => {
+        const oldSelected = selectedPost.title + ': ' + selectedPost.description
+        setIdeas([oldSelected, ...res.data.data.ideas])
+        setSelectedPost(null)
+        setIsLoading(false)
+      })
+    // setTimeout(() => {
+    //   console.log('This will run after 60 second!')
+    //   setIsLoading(false)
+    //   setIdeas([
+    //     'Idea: test title: description',
+    //     'Idea New: test 1: description',
+    //     'Idea 50001 New: test 2: description',
+    //   ])
+    // }, 5000)
   }
 
   const navigate = useNavigate()
-  
+
   const generateIdeaContent = async () => {
     // check if user selected anything
     if (isLoading || selectedPost === null) {
@@ -120,6 +173,16 @@ const IdeaGeneration = () => {
   return (
     <>
       <Container maxW={'5xl'} minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
+        {isLoading && (
+          <Alert status="warning" borderRadius={6} mb={10}>
+            <AlertIcon />
+            <Text as="span">
+              Do not close or refresh the webpage while the ideas are being
+              generated!
+            </Text>
+          </Alert>
+        )}
+
         <Stack spacing={4} mb={3}>
           <Heading
             color={useColorModeValue('black', 'white')}
@@ -127,6 +190,9 @@ const IdeaGeneration = () => {
             textAlign={'center'}
           >
             {isLoading && 'Generating some genius ideas...'}
+            {isLoading && (
+              <Progress mt={3} colorScheme={theme} hasStripe value={progress} />
+            )}
             {!isLoading &&
               'Select your favourite idea out of the 4, and you can either generate more similar ideas, or you can generate the full idea!'}
           </Heading>
@@ -137,7 +203,11 @@ const IdeaGeneration = () => {
           mb={3}
           h={'100px'}
         >
-          <Stack direction={'column'} width={'50%'}>
+          <Stack
+            direction={'column'}
+            w={'50%'}
+            justifyContent={'space-between'}
+          >
             <Text
               color={
                 selectedPost === null
@@ -147,7 +217,7 @@ const IdeaGeneration = () => {
               fontSize={'lg'}
               textAlign={'center'}
             >
-              If you are satisfied with the idea:
+              Satisfied with the selected idea?
             </Text>
             <Button
               isDisabled={isLoading || selectedPost === null}
@@ -159,7 +229,11 @@ const IdeaGeneration = () => {
               {'Continue'}
             </Button>
           </Stack>
-          <Stack direction={'column'} width={'50%'}>
+          <Stack
+            direction={'column'}
+            width={'50%'}
+            justifyContent={'space-between'}
+          >
             <Text
               color={
                 selectedPost === null
@@ -169,7 +243,7 @@ const IdeaGeneration = () => {
               fontSize={'lg'}
               textAlign={'center'}
             >
-              If you want to generate more ideas like the selected one:
+              Generate more ideas similar to selected?
             </Text>
             <Button
               isDisabled={isLoading || selectedPost === null}
