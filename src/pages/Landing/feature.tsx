@@ -54,7 +54,7 @@ export function Feature() {
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
           {features.map((feature) => (
             <HStack key={feature.id} align={'top'}>
-              <Box color={'green.400'} px={2}>
+              <Box color={'#d69e2e'} px={2}>
                 <Icon as={CheckIcon} />
               </Box>
               <VStack align={'start'}>
