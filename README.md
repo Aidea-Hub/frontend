@@ -24,7 +24,13 @@ Try it out on: [https://aidea-hub.netlify.app/](https://aidea-hub.netlify.app/)
       - Firebase Functons: generateIdeas
       - Content Generation Functions: generateIdea1, generateIdea2, generateIdea3, generateIdea4  
 
-4. Albert Ariel Widiaatmaja
+3. [Albert Ariel Widiaatmaja](https://github.com/albertarielw) | A0237848M
+  - Created frontend pages for landing page and subscription page for users to subsribe to AideaHub Plus
+  - Implement backend functions for user subscription to premium features
+  - Frontend:
+     - Pages: Landing Page, Subscription Page
+  - Backend:
+     - Firebase Functions: subscribe, scheduleMonthlyTopupOfCredits, callback function for users who stop payment
 
 ### Setup for local testing
 
