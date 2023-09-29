@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import axios from 'axios'
-import { getAnalytics } from 'firebase/analytics'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 import { getFirestore, Timestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -67,16 +67,6 @@ const IdeaGeneration = () => {
         setIdeas(res.data.data.ideas)
         setIsLoading(false)
       })
-    // setTimeout(() => {
-    //   console.log('This will run after 60 second!')
-    //   setIsLoading(false)
-    //   setIdeas([
-    //     'Idea: test title: description',
-    //     'Idea New: test 1: description',
-    //     'Idea 50001 New: test 2: description',
-    //     'Idea dasdafjkljfklsd: test 3: description',
-    //   ])
-    // }, 1000)
 
     return () => {
       clearInterval(loadingInterval)
@@ -91,11 +81,7 @@ const IdeaGeneration = () => {
   }
 
   useEffect(() => {
-    if (isLoading) {
-      // Make API call to get ideas
-      // set ideas
-      // setIsLoading(false)
-    } else {
+    if (!isLoading) {
       // clear interval
       if (loadingInterval) {
         clearInterval(loadingInterval)
@@ -104,6 +90,9 @@ const IdeaGeneration = () => {
   }, [isLoading])
 
   const generateMoreIdeas = () => {
+    logEvent(analytics, 'generate_more_ideas', {
+      problem: problem,
+    })
     // check if user selected anything
     if (selectedPost === null) {
       return
@@ -122,20 +111,14 @@ const IdeaGeneration = () => {
         setSelectedPost(null)
         setIsLoading(false)
       })
-    // setTimeout(() => {
-    //   console.log('This will run after 60 second!')
-    //   setIsLoading(false)
-    //   setIdeas([
-    //     'Idea: test title: description',
-    //     'Idea New: test 1: description',
-    //     'Idea 50001 New: test 2: description',
-    //   ])
-    // }, 5000)
   }
 
   const navigate = useNavigate()
 
   const generateIdeaContent = async () => {
+    logEvent(analytics, 'generate_idea_content', {
+      problem: problem,
+    })
     // check if user selected anything
     if (isLoading || selectedPost === null) {
       return

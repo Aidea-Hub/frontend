@@ -30,12 +30,15 @@ import { themeSelector } from '../../recoil/selectors'
 import Content from './Content'
 import ContentSidebar from './ContentSidebar'
 import LinkItems from './Sections'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 
 interface Subsection {
   title: string
   id: string
   content: any
 }
+
+const analytics = getAnalytics(firebase)
 
 const LoadingPlaceholderContent = () => {
   const theme = useRecoilValue(themeSelector)
@@ -73,6 +76,9 @@ const FullIdea = () => {
   const toast = useToast()
 
   useEffect(() => {
+    logEvent(analytics, 'full_idea_pv', {
+      ideaId: ideaId,
+    })
     // Create a query against the collection.
     const ideaContentsRef = collection(db, 'idea_contents')
     const q = query(ideaContentsRef, where('idea_id', '==', ideaId))
@@ -182,7 +188,7 @@ const FullIdea = () => {
             isDisabled={isChangingPublic}
             colorScheme={theme}
             isChecked={!isPublic}
-            onChange={() => setVisbilility(!isPublic)}
+            onChange={(e) => setVisbilility(!e.target.checked)}
           />
         </FormControl>
         <div
