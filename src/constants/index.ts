@@ -35,7 +35,6 @@ export const ROUTES = {
   SETTINGS: '/settings',
   SEARCH: '/search',
   GET_PLUS: '/get-plus',
-  VIEW_SEARCHED: '/view-searched',
   VIEW: '/view',
   TOS: '/terms-of-service',
   PRIVACY: '/privacy-policy',
