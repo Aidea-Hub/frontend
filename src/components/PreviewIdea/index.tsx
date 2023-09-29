@@ -193,7 +193,7 @@ export default function PreviewIdea({
         <ModalFooter>
           {!isGeneratedIdea && <Button
             onClick={() => {
-              navigate(`${ROUTES.VIEW}/${idea.id}`)
+              navigate(`${ROUTES.FULL_IDEA_BASE}/${idea.id}`)
             }}
           >
             View Full
