@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { getAnalytics } from 'firebase/analytics'
-import { collection, getFirestore, query, Timestamp, where } from 'firebase/firestore'
+import { getFirestore, Timestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -22,7 +22,7 @@ import firebase from '../../config/firebase'
 import { Idea, NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
-import { set } from 'lodash'
+import authApi from '../../api/authApi'
 
 const analytics = getAnalytics(firebase)
 
@@ -38,7 +38,6 @@ const IdeaGeneration = () => {
   const theme = useRecoilValue(themeSelector)
   const { state } = useLocation()
   const { problem } = state
-  const db = getFirestore(firebase)
   const [user, setUser] = useRecoilState(userAtom)
   const [progress, setProgress] = useState(0) // for loading bar
   const [loadingInterval, setLoadingInterval] = useState<NodeJS.Timeout>()
@@ -53,25 +52,13 @@ const IdeaGeneration = () => {
   // interval will go to 100 in 90 seconds
   const INTERVAL_TIME = (1000 * 90) / 100
 
-  // prevent user from leaving the page
-  useEffect(() => {
-    const unloadCallback = (event: any) => {
-      event.preventDefault()
-      event.returnValue = ''
-      return ''
-    }
-
-    window.addEventListener('beforeunload', unloadCallback)
-    return () => window.removeEventListener('beforeunload', unloadCallback)
-  }, [])
-
   useEffect(() => {
     resetLoading()
 
-    //   console.log('problem :>> ', problem)
+    console.log('problem :>> ', problem)
     // initial load, generate the 4 ideas
-    axios
-      .post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas', {
+    authApi
+      .post(`generateIdeas`, {
         userId: user.uid,
         problem,
       })
@@ -123,8 +110,8 @@ const IdeaGeneration = () => {
     }
 
     resetLoading()
-    axios
-      .post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeas', {
+    authApi
+      .post(`generateIdeas`, {
         userId: user.uid,
         problem,
         numIdeas: 3,
@@ -160,13 +147,18 @@ const IdeaGeneration = () => {
     setLoadingInterval(interval)
 
     // TODO: call endpoint and pass idea_id to new page
-    await axios.post('https://us-central1-aidea-hub.cloudfunctions.net/generateIdeaContent', {
-      userId: user.uid,
-      title: selectedPost.title,
-      description: selectedPost.description,
-    }).then((res) => {
-      navigate(`${ROUTES.FULL_IDEA_BASE}\\${res.data.ideaId}`)
-    })    
+    await authApi
+      .post(
+        `generateIdeaContent`,
+        {
+          userId: user.uid,
+          title: selectedPost.title,
+          description: selectedPost.description,
+        }
+      )
+      .then(res => {
+        navigate(`${ROUTES.FULL_IDEA_BASE}\\${res.data.ideaId}`)
+      })
   }
 
   function processIdea(input: string) {
@@ -201,73 +193,80 @@ const IdeaGeneration = () => {
             textAlign={'center'}
           >
             {isLoading && 'Generating some genius ideas...'}
-            {isCreatingNewIdea && 'Setting up our genius team to generate your idea for you... You will be redirected to the full idea page shortly!'}
+            {isCreatingNewIdea &&
+              'Setting up our genius team to generate your idea for you... You will be redirected to the full idea page shortly!'}
             {(isLoading || isCreatingNewIdea) && (
               <Progress mt={3} colorScheme={theme} hasStripe value={progress} />
             )}
-            {!isLoading &&
+            {(!isLoading && !isCreatingNewIdea) &&
               'Select your favourite idea out of the 4, and you can either generate more similar ideas, or you can generate the full idea!'}
           </Heading>
         </Stack>
-        {(!isLoading && !isCreatingNewIdea) && <Stack
-          direction={'row'}
-          justifyContent={'space-between'}
-          mb={3}
-          h={'100px'}
-        >
+        {!isLoading && !isCreatingNewIdea && (
           <Stack
-            direction={'column'}
-            w={'50%'}
+            direction={'row'}
             justifyContent={'space-between'}
+            mb={3}
+            h={'100px'}
           >
-            <Text
-              color={
-                selectedPost === null
-                  ? 'gray.400'
-                  : useColorModeValue('black', 'white')
-              }
-              fontSize={'lg'}
-              textAlign={'center'}
+            <Stack
+              direction={'column'}
+              w={'50%'}
+              justifyContent={'space-between'}
             >
-              Satisfied with the selected idea?
-            </Text>
-            <Button
-              isDisabled={isLoading || selectedPost === null}
-              size="lg"
-              colorScheme={isLoading || selectedPost === null ? 'gray' : theme}
-              color={useColorModeValue('white', 'black')}
-              onClick={generateIdeaContent}
+              <Text
+                color={
+                  selectedPost === null
+                    ? 'gray.400'
+                    : useColorModeValue('black', 'white')
+                }
+                fontSize={'lg'}
+                textAlign={'center'}
+              >
+                Satisfied with the selected idea?
+              </Text>
+              <Button
+                isDisabled={isLoading || selectedPost === null}
+                size="lg"
+                colorScheme={
+                  isLoading || selectedPost === null ? 'gray' : theme
+                }
+                color={useColorModeValue('white', 'black')}
+                onClick={generateIdeaContent}
+              >
+                {'Continue'}
+              </Button>
+            </Stack>
+            <Stack
+              direction={'column'}
+              width={'50%'}
+              justifyContent={'space-between'}
             >
-              {'Continue'}
-            </Button>
+              <Text
+                color={
+                  selectedPost === null
+                    ? 'gray.400'
+                    : useColorModeValue('black', 'white')
+                }
+                fontSize={'lg'}
+                textAlign={'center'}
+              >
+                Generate more ideas similar to selected?
+              </Text>
+              <Button
+                isDisabled={isLoading || selectedPost === null}
+                size="lg"
+                colorScheme={
+                  isLoading || selectedPost === null ? 'gray' : theme
+                }
+                color={useColorModeValue('white', 'black')}
+                onClick={generateMoreIdeas}
+              >
+                {'Generate Similar'}
+              </Button>
+            </Stack>
           </Stack>
-          <Stack
-            direction={'column'}
-            width={'50%'}
-            justifyContent={'space-between'}
-          >
-            <Text
-              color={
-                selectedPost === null
-                  ? 'gray.400'
-                  : useColorModeValue('black', 'white')
-              }
-              fontSize={'lg'}
-              textAlign={'center'}
-            >
-              Generate more ideas similar to selected?
-            </Text>
-            <Button
-              isDisabled={isLoading || selectedPost === null}
-              size="lg"
-              colorScheme={isLoading || selectedPost === null ? 'gray' : theme}
-              color={useColorModeValue('white', 'black')}
-              onClick={generateMoreIdeas}
-            >
-              {'Generate Similar'}
-            </Button>
-          </Stack>
-        </Stack>}
+        )}
         <SimpleGrid h={'800px'} columns={{ base: 1, md: 2 }} spacing={5} mb={5}>
           {isLoading && (
             <>
