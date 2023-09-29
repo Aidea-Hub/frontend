@@ -72,7 +72,7 @@ const Content = ({ sections, ideaId, imageUrl, ideaUserId }: ContentProps) => {
         <Image
           rounded={'md'}
           src={imageUrl}
-          maxH={512}
+          maxH={200}
           objectFit="contain"
           fallbackSrc={`https://dummyidea.com/${512}x${768}/${
             colorMode === 'light' ? 'aaa' : 'fff'

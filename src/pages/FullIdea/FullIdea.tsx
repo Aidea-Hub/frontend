@@ -189,7 +189,7 @@ const FullIdea = () => {
 
   return (
     <>
-      <Container maxW={'5xl'} h={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
+      <Container maxW={'5xl'} h={`calc(100vh - ${NAVBAR_HEIGHT + 10}px)`} minH={"600px"}>
         <Heading mb={3}>Full Idea</Heading>
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="email-alerts" mb="0">
@@ -216,7 +216,8 @@ const FullIdea = () => {
           style={{
             marginTop: '10px',
             borderRadius: 10,
-            height: '90%',
+            height: '70%',
+            minHeight: "300px",
             backgroundColor: useColorModeValue('#ffffff', '#171c20'),
           }}
         >
