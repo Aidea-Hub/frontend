@@ -92,6 +92,8 @@ const Gallery = () => {
 
   const queryBuilder = (isFirst = false) => {
     let q = query(collection(db, 'ideas'))
+    q = query(q, where('isPublic', '==', true))
+
     if (keyword) {
       q = query(q, where('keywords', 'array-contains', keyword))
     }

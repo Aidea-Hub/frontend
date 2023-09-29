@@ -1,6 +1,5 @@
 import { Box, useColorMode } from '@chakra-ui/react'
 import { Route, Routes } from 'react-router-dom'
-
 import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -25,6 +24,7 @@ import Settings from './pages/Settings'
 import ViewIdea from './pages/ViewIdea'
 import IdeaGeneration from './pages/IdeaGeneration'
 import FullIdea from './pages/FullIdea/FullIdea'
+import Landing from './pages/Landing'
 import { colorModeState } from './recoil/atoms'
 export const App = () => {
   const { colorMode } = useColorMode()
@@ -53,6 +53,7 @@ export const App = () => {
           <ScrollToTop>
             <Routes>
               <Route path={ROUTES.HOME} element={<Home />} />
+              <Route path={ROUTES.LANDING} element={<Landing />} />
               <Route path={ROUTES.SEARCH} element={<Search />} />
               <Route path={ROUTES.GALLERY} element={<Gallery />} />
               <Route 
