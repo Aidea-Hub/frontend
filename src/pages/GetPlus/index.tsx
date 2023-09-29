@@ -90,7 +90,7 @@ export default function GetPlus() {
   const user = useRecoilValue(userAtom)
   const navigate = useNavigate()
   const theme = useRecoilValue(themeSelector)
-  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_DEV_URL + "createCheckoutSession"
+  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_PROD_URL + "createCheckoutSession"
 
 
   useEffect(() => {
