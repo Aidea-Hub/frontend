@@ -7,7 +7,8 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { getAnalytics, logEvent } from 'firebase/analytics'
+import { getAnalytics } from 'firebase/analytics'
+import { collection, doc, getDoc, getFirestore } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import { useRecoilValue } from 'recoil'
@@ -16,11 +17,11 @@ import IdeaCard from '../../components/IdeaCard'
 import PreviewIdea from '../../components/PreviewIdea'
 import PulsingDot from '../../components/PulsingDot'
 import firebase from '../../config/firebase'
-import { getCDNUrl } from '../../constants'
 import { likedSortAtom, userAtom } from '../../recoil/atoms'
 
 const PAGE_LIMIT = 15
 const analytics = getAnalytics(firebase)
+const db = getFirestore(firebase)
 
 export const LikedSortOptions = [
   { name: 'Latest Liked', value: 'liked_at-desc' },
@@ -47,59 +48,60 @@ const Liked = () => {
     onOpen()
   }
 
-  const getInitialIdeas = async () => {
-    console.log('getInitialIdeas')
-    console.log('user.liked_ideas', user.liked_ideas)
-    logEvent(analytics, 'liked_get_initial_ideas', {
-      sort: likedSort,
-    })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getIdeasByIds = async (ids: string[]) => {
+    console.log('ids', ids)
+    const ideasRef = collection(db, 'ideas')
+
     const newIdeas: any[] = []
-    const userLikedIdeas = [...user.liked_ideas]
-    if (likedSort === 'liked_at-desc') {
-      setLikes(userLikedIdeas.reverse())
-    } else {
-      setLikes(userLikedIdeas)
-    }
+    // Using Promise.all to fetch all documents in parallel
+    const allDocs = await Promise.all(ids.map(id => getDoc(doc(ideasRef, id))))
 
-    const len = Math.min(PAGE_LIMIT, userLikedIdeas.length)
-    for (let i = 0; i < len; i++) {
-      newIdeas.push({
-        id: userLikedIdeas[i],
-        url: getCDNUrl(userLikedIdeas[i]),
-      })
-    }
-
-    if (len > 0) {
-      setLastVisible(len)
-    }
-
-    setHasNextPage(newIdeas.length == PAGE_LIMIT)
-
-    setIdeas(newIdeas)
-    setLoading(false)
-    console.log('newIdeas', newIdeas)
-  }
-
-  const fetchNextPage = async () => {
-    console.log('fetchNextPage')
-
-    if (lastVisible !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const newIdeas: any[] = []
-      const len = Math.min(lastVisible + 1 + PAGE_LIMIT, likes.length)
-      for (let i = lastVisible + 1; i < len; i++) {
+    allDocs.forEach(doc => {
+      if (doc.exists()) {
         newIdeas.push({
-          id: likes[i],
-          url: getCDNUrl(likes[i]),
+          id: doc.id,
+          ...doc.data(),
         })
       }
+    })
 
-      if (len > 0) {
-        setLastVisible(len)
-      }
+    console.log('newIdeas', newIdeas)
 
-      setHasNextPage(newIdeas.length == PAGE_LIMIT)
+    return newIdeas
+  }
+
+  const getInitialIdeas = async () => {
+    setLoading(true)
+
+    const sortedLikes = [...user.liked_ideas]
+    if (likedSort === 'liked_at-desc') {
+      sortedLikes.reverse()
+    }
+
+    setLikes(sortedLikes)
+
+    const batchIds = sortedLikes.slice(0, PAGE_LIMIT)
+    const newIdeas = await getIdeasByIds(batchIds)
+
+    if (batchIds.length > 0) {
+      setLastVisible(batchIds.length - 1)
+    }
+
+    setHasNextPage(newIdeas.length === PAGE_LIMIT)
+    console.log('newIdeas', newIdeas)
+    setIdeas(newIdeas)
+    setLoading(false)
+  }
+  const fetchNextPage = async () => {
+    if (lastVisible !== undefined) {
+      const nextBatchIds = likes.slice(
+        lastVisible + 1,
+        lastVisible + 1 + PAGE_LIMIT
+      )
+      const newIdeas = await getIdeasByIds(nextBatchIds)
+
+      setLastVisible(lastVisible + nextBatchIds.length)
+      setHasNextPage(newIdeas.length === PAGE_LIMIT)
       setIdeas([...ideas, ...newIdeas])
       console.log('newIdeas', newIdeas)
     }

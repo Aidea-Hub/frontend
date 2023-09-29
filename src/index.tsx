@@ -5,9 +5,9 @@ import { HelmetProvider } from 'react-helmet-async'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+import RecoilNexus from 'recoil-nexus'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorker from './serviceWorker'
-// import { GoogleOAuthProvider } from '@react-oauth/google'
 
 import { App } from './App'
 import myTheme from './config/theme'
@@ -29,6 +29,7 @@ root.render(
       <ChakraProvider theme={myTheme}>
         <BrowserRouter>
           <RecoilRoot>
+            <RecoilNexus />
             <QueryClientProvider client={queryClient}>
               <App />
             </QueryClientProvider>

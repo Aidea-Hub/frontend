@@ -36,7 +36,10 @@ export default function ShimmerButton({
     >
       <Box
         bgGradient={
-          bgGradient || `linear(to-r, ${theme}.300, pink.400 , ${theme}.300)`
+          bgGradient ||
+          (theme == 'pink'
+            ? `linear(to-r, purple.300, ${theme}.400 , purple.300)`
+            : `linear(to-r, ${theme}.300, pink.400 , ${theme}.300)`)
         }
         w={`${buttonWidth * 3}px`}
         h="100%"

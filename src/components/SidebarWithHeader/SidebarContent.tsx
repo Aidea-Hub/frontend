@@ -3,6 +3,7 @@ import {
   BoxProps,
   CloseButton,
   Flex,
+  Hide,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
@@ -14,8 +15,11 @@ import {
   AiOutlineSearch,
   AiOutlineSetting,
 } from 'react-icons/ai'
+import { FiLogOut } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { ROUTES } from '../../constants'
+import { userAtom } from '../../recoil/atoms'
 import Logo from '../Logo'
 import NavItem from './NavItem'
 
@@ -32,6 +36,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Past Ideas', path: ROUTES.PAST_IDEAS, icon: AiOutlineBook },
   { name: 'Liked', path: ROUTES.LIKED, icon: AiOutlineHeart },
   { name: 'Settings', path: ROUTES.SETTINGS, icon: AiOutlineSetting },
+  { name: 'Logout', path: ROUTES.HOME, icon: FiLogOut },
 ]
 
 interface SidebarProps extends BoxProps {
@@ -39,6 +44,9 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const resetUser = useResetRecoilState(userAtom)
+  const user = useRecoilValue(userAtom)
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.900')}
@@ -54,9 +62,27 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map(link => (
-        <Link to={link.path} key={link.name} onClick={onClose}>
-          <NavItem icon={link.icon}>{link.name}</NavItem>
-        </Link>
+        <>
+          {(link.name !== 'Logout' ||
+            (link.name === 'Logout' && user.uid !== '')) && (
+            <Hide
+              above={link.name === 'Logout' ? 'md' : 'never'}
+              key={link.name}
+            >
+              <Link
+                to={link.path}
+                onClick={() => {
+                  if (link.name === 'Logout') {
+                    resetUser()
+                  }
+                  onClose()
+                }}
+              >
+                <NavItem icon={link.icon}>{link.name}</NavItem>
+              </Link>
+            </Hide>
+          )}
+        </>
       ))}
     </Box>
   )
