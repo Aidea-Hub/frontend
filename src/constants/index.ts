@@ -40,6 +40,8 @@ export const ROUTES = {
   PRIVACY: '/privacy-policy',
   COOKIES: '/cookie-policy',
   NOT_FOUND: '/not-found',
+  SUCCESS: '/success',
+  FAIL: '/fail'
 }
 
 export interface User {
