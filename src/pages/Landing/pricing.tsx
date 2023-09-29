@@ -40,7 +40,7 @@ function PriceWrapper(props: Props) {
 
 export function Pricing() {
   const theme = useRecoilValue(themeSelector)
-  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_DEV_URL + "createCheckoutSession"
+  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_PROD_URL + "createCheckoutSession"
   return (
     <Box py={12}>
       <VStack spacing={2} textAlign="center">
