@@ -26,6 +26,7 @@ import IdeaGeneration from './pages/IdeaGeneration'
 import FullIdea from './pages/FullIdea/FullIdea'
 import Landing from './pages/Landing'
 import { colorModeState } from './recoil/atoms'
+import { Success, Fail } from './pages/Payment'
 export const App = () => {
   const { colorMode } = useColorMode()
   const [recoilColorMode, setRecoilColorMode] = useRecoilState(colorModeState)
@@ -70,6 +71,8 @@ export const App = () => {
                   <FullIdea />
                 </ProtectedRoute>
               } />
+              <Route path={ROUTES.SUCCESS} element={<Success />} />
+              <Route path={ROUTES.FAIL} element={<Fail />} />
               <Route
                 path={ROUTES.LIKED}
                 element={

@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  Button
 } from '@chakra-ui/react'
 import { getAnalytics, logEvent } from 'firebase/analytics'
 import { ReactElement, useEffect } from 'react'
@@ -89,6 +90,8 @@ export default function GetPlus() {
   const user = useRecoilValue(userAtom)
   const navigate = useNavigate()
   const theme = useRecoilValue(themeSelector)
+  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_DEV_URL + "createCheckoutSession"
+
 
   useEffect(() => {
     // Already logged in
@@ -116,10 +119,18 @@ export default function GetPlus() {
           <Text fontSize={{ base: 'sm', sm: 'lg' }}>
             Enjoy prirority and full access to all functionality in Aidea hub
           </Text>
-          <ShimmerButton
-            text="Get Aidea hub+ now"
-            onClick={handleNavigatToPatreon}
-          />
+          <form action={stripe_link} method="POST">
+                  <Button w="full" bg={'#d69e2e'} type="submit">
+                  Get Aidea hub+ now
+                  </Button>
+                </form>
+          {/* <form action={stripe_link} method="POST">
+            <ShimmerButton
+              text="Get Aidea hub+ now"
+              onClick={handleNavigatToPatreon}
+            />
+          </form> */}
+
         </Stack>
 
         <Container maxW={'5xl'} mt={12}>

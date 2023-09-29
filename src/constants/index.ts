@@ -45,6 +45,8 @@ export const ROUTES = {
   FULL_IDEA: "/full-idea/:ideaId",
   FULL_IDEA_BASE: "/full-idea",
   NOT_FOUND: '/not-found',
+  SUCCESS: '/success',
+  FAIL: '/fail'
 }
 
 export interface User {
