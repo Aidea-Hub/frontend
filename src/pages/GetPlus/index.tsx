@@ -88,7 +88,7 @@ const FeatureCard = ({
 // ]
 
 
-const stripe_key = process.env.STRIPE_KEY || ""
+const stripe_key = process.env.REACT_APP_STRIPE_KEY || ""
 const stripe = new Stripe(stripe_key, {
   apiVersion: "2023-08-16",
   typescript: true,

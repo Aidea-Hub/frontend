@@ -47,17 +47,12 @@ function PriceWrapper(props: Props) {
 export function Pricing() {
   const theme = useRecoilValue(themeSelector)
 
-  let stripe_key = process.env.STRIPE_KEY
-  if (!stripe_key) {
-    stripe_key = ""
-  }
+  const stripe_key = process.env.REACT_APP_STRIPE_KEY || ""
   const stripe = new Stripe(stripe_key, {
     apiVersion: "2023-08-16",
     typescript: true,
   });
 
-  console.log("KEY:", stripe_key)
-  
   const handler = async () => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
