@@ -9,6 +9,7 @@ const Landing = () => {
         <>
             <Hero />
             <Feature />
+            <Pricing />
         </>
     )
 }
