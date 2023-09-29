@@ -34,9 +34,10 @@ interface ContentProps {
   sections: Contents[]
   ideaId: string
   imageUrl: string
+  ideaUserId: string
 }
 
-const Content = ({ sections, ideaId, imageUrl }: ContentProps) => {
+const Content = ({ sections, ideaId, imageUrl, ideaUserId }: ContentProps) => {
   const db = getFirestore(firebase)
   const { colorMode } = useColorMode()
   const theme = useRecoilValue(themeSelector)
@@ -83,7 +84,7 @@ const Content = ({ sections, ideaId, imageUrl }: ContentProps) => {
           }.png&text=Idea+removed+or+does+not+exist`}
           fallbackStrategy="onError"
         />
-        <Tooltip label={"Regenerate Image"}>
+        {ideaUserId === user.uid && <Tooltip label={"Regenerate Image"}>
           <IconButton
             aria-label="regenerate image"
             position="relative"
@@ -96,7 +97,7 @@ const Content = ({ sections, ideaId, imageUrl }: ContentProps) => {
           >
             Regenerate
           </IconButton>
-        </Tooltip>
+        </Tooltip>}
       </Box>
       {sections.map(section => {
         return (

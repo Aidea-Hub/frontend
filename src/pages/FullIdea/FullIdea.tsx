@@ -73,6 +73,7 @@ const FullIdea = () => {
   const [ideaContentId, setIdeaContentId] = useState<string>('')
   const [isPublic, setIsPublic] = useState<boolean>(true)
   const [image, setImage] = useState<string>("")
+  const [userIdeaId, setUserIdeaId] = useState<string>('')
   const [isChangingPublic, setIsChangingPublic] = useState<boolean>(false)
   const toast = useToast()
   const navigate = useNavigate()
@@ -97,6 +98,7 @@ const FullIdea = () => {
       }
       setIsPublic(data.isPublic)
       setImage(data.url)
+      setUserIdeaId(data.user_id)
     })
   }, [])
 
@@ -207,7 +209,7 @@ const FullIdea = () => {
         >
           <Stack direction={'row'} height={'100%'}>
             <ContentSidebar />
-            <Content sections={sections} ideaId={ideaId ?? ""} imageUrl={image}/>
+            <Content sections={sections} ideaId={ideaId ?? ""} imageUrl={image} ideaUserId={userIdeaId}/>
           </Stack>
         </div>
       </Container>
