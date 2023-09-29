@@ -15,9 +15,16 @@ Try it out on: [https://aidea-hub.netlify.app/](https://aidea-hub.netlify.app/)
      - firebase functions: generateIdeaContent, generateNewIdeaImage, likeIdea, voteIdea, login, updateUserSettings
      - content generation functions: generateReflection (Generats content, Reflect and criticizes them, Improves them), generateResearch (performs research on DuckDuckGo and Wikipedia )
 
-2. Taufiq Bin Abdul Rahman
+2. [Taufiq Bin Abdul Rahman](https://github.com/tau-bar) | A0218081L
+   - Created frontend pages for users to enter their problem, page for users to view the 4 generated ideas, and the full idea page to display the full idea content
+   - Implemented 4 different idea generation methods, which are used for the generation of ideas given a problem
+   - Frontend:
+      - Pages: Home Page, Idea Generation Page, Full Idea Page (with realtime updates)
+   - Backend:
+      - Firebase Functons: generateIdeas
+      - Content Generation Functions: generateIdea1, generateIdea2, generateIdea3, generateIdea4  
 
-3. Albert Ariel Widiaatmaja
+4. Albert Ariel Widiaatmaja
 
 ### Setup for local testing
 
