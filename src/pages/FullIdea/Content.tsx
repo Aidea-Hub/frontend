@@ -1,4 +1,4 @@
-import { Container, Heading, Stack } from '@chakra-ui/react'
+import { Heading, Stack, Text } from '@chakra-ui/react'
 
 export interface Contents {
   title: string
@@ -29,16 +29,26 @@ const Content = ({ sections }: ContentProps) => {
       {sections.map(section => {
         return (
           <>
-            <Heading key={section.id} id={section.id} size={'lg'} mb={2}>
+            <Heading key={section.id} id={section.id} size={'xl'} mb={2}>
               {section.title}
             </Heading>
             {section.sections.map(s => {
               return (
                 <>
-                  <Heading key={`heading-${s.id}`} id={s.id} size={'md'} mb={1}>
+                  <br />
+                  <Heading key={`heading-${s.id}`} id={s.id} size={'lg'} mb={1}>
                     {s.title}
                   </Heading>
-                  <Container key={`content-${s.id}`} >{s.content}</Container>
+                  <br />
+                  <Text
+                    size={'lg'}
+                    key={`content-${s.id}`}
+                    whiteSpace="pre-line"
+                    my={2}
+                  >
+                    {s.content}
+                  </Text>{' '}
+                  <br />
                 </>
               )
             })}

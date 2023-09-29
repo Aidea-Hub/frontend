@@ -10,6 +10,7 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 import {
   collection,
   doc,
@@ -30,7 +31,6 @@ import { themeSelector } from '../../recoil/selectors'
 import Content from './Content'
 import ContentSidebar from './ContentSidebar'
 import LinkItems from './Sections'
-import { getAnalytics, logEvent } from 'firebase/analytics'
 
 interface Subsection {
   title: string
@@ -120,9 +120,10 @@ const FullIdea = () => {
                   content: <LoadingPlaceholderContent />,
                 }
               }
+              const currData = data[subsection.id]
               return {
                 ...subsection,
-                content: data[subsection.id],
+                content: currData,
               }
             }),
           }
@@ -188,7 +189,7 @@ const FullIdea = () => {
             isDisabled={isChangingPublic}
             colorScheme={theme}
             isChecked={!isPublic}
-            onChange={(e) => setVisbilility(!e.target.checked)}
+            onChange={e => setVisbilility(!e.target.checked)}
           />
         </FormControl>
         <div
