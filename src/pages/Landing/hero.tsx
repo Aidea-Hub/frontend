@@ -12,6 +12,8 @@ import {
   Icon,
   IconProps,
 } from '@chakra-ui/react'
+import { themeSelector } from '../../recoil/selectors'
+import { useRecoilValue } from 'recoil'
 
 const Illustration = (props: IconProps) => {
   return (
@@ -827,6 +829,8 @@ const Illustration = (props: IconProps) => {
 }
 
 export function Hero() {
+  const theme = useRecoilValue(themeSelector)
+
   return (
     <Container maxW={'5xl'}>
       <Stack
@@ -838,30 +842,29 @@ export function Hero() {
           fontWeight={600}
           fontSize={{ base: '3xl', sm: '4xl', md: '6xl' }}
           lineHeight={'110%'}>
-          Ideation{' '}
-          <Text as={'span'} color={'orange.400'}>
-            made easy
+          Ideation{' '} 
+          <Text as={'span'} color={'#d69e2e'}>
+            Made Easy
           </Text>
         </Heading>
-        <Text color={'gray.500'} maxW={'3xl'}>
-          We get it. Ideation is an exhausting process, having to overwork our brains to generate new ideas.
+        <Text color={'gray.400'} maxW={'3xl'}>
+          We get it, ideation is pain. But not anymore. Transform your vision to reality effortlessly with Aidea Hub!
         </Text>
         <Stack spacing={6} direction={'row'}>
           <Button
             rounded={'full'}
             px={6}
-            colorScheme={'orange'}
-            bg={'orange.400'}
-            _hover={{ bg: 'orange.500' }}>
-            Get started
+            colorScheme={`${theme}`}
+>
+            Let&apos;s Go!
           </Button>
-          <Button rounded={'full'} px={6}>
+          {/* <Button rounded={'full'} px={6}>
             Learn more
-          </Button>
+          </Button> */}
         </Stack>
-        <Flex w={'full'}>
+        {/* <Flex w={'full'}>
           <Illustration height={{ sm: '24rem', lg: '28rem' }} mt={{ base: 12, sm: 16 }} />
-        </Flex>
+        </Flex> */}
       </Stack>
     </Container>
   )

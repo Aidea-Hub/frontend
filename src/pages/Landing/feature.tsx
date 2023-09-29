@@ -25,11 +25,11 @@ export function Feature() {
   return (
     <Box p={4}>
       <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
-        <Heading fontSize={'3xl'}>This is the headline</Heading>
-        <Text color={'gray.600'} fontSize={'xl'}>
+        <Heading fontSize={'3xl'}>Our Features</Heading>
+        {/* <Text color={'gray.600'} fontSize={'xl'}>
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
           tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-        </Text>
+        </Text> */}
       </Stack>
 
       <Container maxW={'6xl'} mt={10}>
@@ -41,7 +41,7 @@ export function Feature() {
               </Box>
               <VStack align={'start'}>
                 <Text fontWeight={600}>{feature.title}</Text>
-                <Text color={'gray.600'}>{feature.text}</Text>
+                <Text color={'gray.500'}>{feature.text}</Text>
               </VStack>
             </HStack>
           ))}
