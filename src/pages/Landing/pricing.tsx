@@ -16,6 +16,9 @@ import {
 import { FaCheckCircle } from 'react-icons/fa'
 import { themeSelector } from '../../recoil/selectors'
 import { useRecoilValue } from 'recoil'
+import authApi from '../../api/authApi'
+import { useNavigate } from 'react-router-dom'
+import Stripe from "stripe";
 
 interface Props {
   children: React.ReactNode
@@ -38,9 +41,41 @@ function PriceWrapper(props: Props) {
   )
 }
 
+
+
+
 export function Pricing() {
   const theme = useRecoilValue(themeSelector)
-  const stripe_link = process.env.REACT_APP_CLOUD_FUNCTION_PROD_URL + "createCheckoutSession"
+
+  const stripe_key = process.env.REACT_APP_STRIPE_KEY || ""
+  const stripe = new Stripe(stripe_key, {
+    apiVersion: "2023-08-16",
+    typescript: true,
+  });
+
+  const handler = async () => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: 'price_1NvNLBFMQoAOlyFrTKBp5ES5',
+          quantity: 1,
+        },
+      ],
+      mode: 'subscription',
+      success_url: 'https://aidea-hub.netlify.app/success',
+      cancel_url: 'https://aidea-hub.netlify.app/fail',
+      automatic_tax: {enabled: true},
+    })
+
+    if (!session.url) {
+      window.location.href = 'https://aidea-hub.netlify.app/fail'
+    }
+
+    const url = session.url
+    window.location.href = "" + url;
+  }
+
   return (
     <Box py={12}>
       <VStack spacing={2} textAlign="center">
@@ -126,11 +161,11 @@ export function Pricing() {
               </List>
               
               <Box w="80%" pt={7}>
-                <form action={stripe_link} method="POST">
-                  <Button w="full" bg={'#d69e2e'} type="submit">
+
+                  <Button w="full" bg={'#d69e2e'} onClick={handler}>
                     Buy Now!
                   </Button>
-                </form>
+
               </Box>
             </VStack>
           </Box>

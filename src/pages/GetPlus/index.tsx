@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import {
   Box,
   Container,
@@ -23,7 +24,7 @@ import { useRecoilValue } from 'recoil'
 import Header from '../../components/Head'
 import ShimmerButton from '../../components/ShimmerButton'
 import firebase from '../../config/firebase'
-import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
+import { ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 
@@ -86,6 +87,14 @@ const FeatureCard = ({
 //   { id: 4, desc: 'Bonus Settings (Setting themes)' },
 // ]
 
+
+const stripe_key = process.env.REACT_APP_STRIPE_KEY || ""
+const stripe = new Stripe(stripe_key, {
+  apiVersion: "2023-08-16",
+  typescript: true,
+});
+
+
 export default function GetPlus() {
   const user = useRecoilValue(userAtom)
   const navigate = useNavigate()
@@ -105,13 +114,36 @@ export default function GetPlus() {
     window.location.href = 'https://patreon.com/Aidea hub'
   }
 
+  const handler = async () => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: 'price_1NvNLBFMQoAOlyFrTKBp5ES5',
+          quantity: 1,
+        },
+      ],
+      mode: 'subscription',
+      success_url: 'https://aidea-hub.netlify.app/success',
+      cancel_url: 'https://aidea-hub.netlify.app/fail',
+      automatic_tax: {enabled: true},
+    })
+
+    if (!session.url) {
+      window.location.href = 'https://aidea-hub.netlify.app/fail'
+    }
+
+    const url = session.url
+    window.location.href = "" + url;
+  }
+
   return (
     <>
       <Header
         title="Get Aidea hub+"
         description="Upgrade to access full functionality for Aidea hub"
       />
-      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${NAVBAR_HEIGHT}px)`}>
+      <Container flex={1} maxW="5xl" minH={`calc(100vh - ${200}px)`}>
         <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
           <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
             Upgrade to Aidea hub+
@@ -119,11 +151,10 @@ export default function GetPlus() {
           <Text fontSize={{ base: 'sm', sm: 'lg' }}>
             Enjoy prirority and full access to all functionality in Aidea hub
           </Text>
-          <form action={stripe_link} method="POST">
-                  <Button w="full" bg={'#d69e2e'} type="submit">
-                  Get Aidea hub+ now
-                  </Button>
-                </form>
+          <ShimmerButton
+            text="Get Aidea hub+ now"
+            onClick={handler}
+          />
           {/* <form action={stripe_link} method="POST">
             <ShimmerButton
               text="Get Aidea hub+ now"
