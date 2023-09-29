@@ -52,8 +52,10 @@ cd frontend
 npm run start
 ```
 
-### Resources used
+### Resources used/referred ti
 
 - [Chakra UI](https://chakra-ui.com/)
 - [Chakra Templates](https://chakra-templates.dev/)
 - [Open AI API endpoints](https://platform.openai.com/docs/api-reference)
+- [Langchain](https://python.langchain.com/docs/get_started/introduction)
+- [langchain_experimental.smart_llm.base](https://api.python.langchain.com/en/latest/_modules/langchain_experimental/smart_llm/base.html#SmartLLMChain)
