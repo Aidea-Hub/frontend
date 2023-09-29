@@ -14,11 +14,34 @@ import {
 import { CheckIcon } from '@chakra-ui/icons'
 
 // Replace test data with your own
-const features = [...Array(8)].map((x, i) => ({
-  id: i,
-  title: 'Lorem ipsum dolor sit amet',
-  text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam.',
-}));
+// const features = [...Array(4)].map((x, i) => ({
+//   id: i,
+//   title: 'Lorem ipsum dolor sit amet',
+//   text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam.',
+// }));
+
+const features = [
+  {
+    id: 0,
+    title: "Proven and Tested Project Ideation Framework",
+    text: "Aidea Hub offers a trusted ideation framework developed with input from industry experts.",
+  },
+  {
+    id: 1,
+    title: "Effortless Idea Generation",
+    text: "Aidea Hub leverages AI to simplify idea generation, covering all key project aspects with a single prompt.",
+  },
+  {
+    id: 2,
+    title: "Idea Inspiration & Sharing",
+    text: "Aidea Hub fosters creativity with idea sharing and a voting system for popular concepts.",
+  },
+  {
+    id: 3,
+    title: "Comprehensive Project Ideation Milestones",
+    text: "Aidea Hub offers a comprehensive results covering all the essential milestones: foundation, moat, marketing, etc.",
+  }
+]
 
 
 export function Feature() {
