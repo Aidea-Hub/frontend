@@ -20,11 +20,11 @@ import {
   where,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import authApi from '../../api/authApi'
 import firebase from '../../config/firebase'
-import { NAVBAR_HEIGHT } from '../../constants'
+import { NAVBAR_HEIGHT, ROUTES } from '../../constants'
 import { userAtom } from '../../recoil/atoms'
 import { themeSelector } from '../../recoil/selectors'
 import Content from './Content'
@@ -72,8 +72,10 @@ const FullIdea = () => {
   const [sections, setSections] = useState<any[]>(content)
   const [ideaContentId, setIdeaContentId] = useState<string>('')
   const [isPublic, setIsPublic] = useState<boolean>(true)
+  const [image, setImage] = useState<string>("")
   const [isChangingPublic, setIsChangingPublic] = useState<boolean>(false)
   const toast = useToast()
+  const navigate = useNavigate()
 
   useEffect(() => {
     logEvent(analytics, 'full_idea_pv', {
@@ -89,8 +91,12 @@ const FullIdea = () => {
 
     onSnapshot(doc(collection(db, 'ideas'), ideaId), snapshot => {
       const data = snapshot.data()
-      if (!data) return
+      if (!data) {
+        navigate(ROUTES.NOT_FOUND);
+        return
+      }
       setIsPublic(data.isPublic)
+      setImage(data.url)
     })
   }, [])
 
@@ -201,7 +207,7 @@ const FullIdea = () => {
         >
           <Stack direction={'row'} height={'100%'}>
             <ContentSidebar />
-            <Content sections={sections} />
+            <Content sections={sections} ideaId={ideaId ?? ""} imageUrl={image}/>
           </Stack>
         </div>
       </Container>
