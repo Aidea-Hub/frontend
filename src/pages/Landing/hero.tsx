@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { themeSelector } from '../../recoil/selectors'
 import { useRecoilValue } from 'recoil'
+import {Routes, Route, useNavigate} from 'react-router-dom';
 
 const Illustration = (props: IconProps) => {
   return (
@@ -830,6 +831,11 @@ const Illustration = (props: IconProps) => {
 
 export function Hero() {
   const theme = useRecoilValue(themeSelector)
+  const navigate = useNavigate();
+  const navigateHome = () => {
+    // 👇️ navigate to /
+    navigate('/home');
+  };
 
   return (
     <Container maxW={'5xl'}>
@@ -847,15 +853,15 @@ export function Hero() {
             Made Easy
           </Text>
         </Heading>
-        <Text color={'gray.400'} maxW={'3xl'}>
-          We get it, ideation is pain. But not anymore. Transform your vision to reality effortlessly with Aidea Hub!
+        <Text color={'gray.500'} maxW={'3xl'}>
+          We get it, ideation is pain. But not anymore. Transform your vision to reality effortlessly with Aidea hub!
         </Text>
         <Stack spacing={6} direction={'row'}>
           <Button
             rounded={'full'}
             px={6}
-            colorScheme={`${theme}`}
->
+            bg={'#d69e2e'}
+            onClick={navigateHome}>
             Let&apos;s Go!
           </Button>
           {/* <Button rounded={'full'} px={6}>
