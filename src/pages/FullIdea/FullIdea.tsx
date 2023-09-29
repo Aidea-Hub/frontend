@@ -131,9 +131,10 @@ const FullIdea = () => {
                   content: <LoadingPlaceholderContent />,
                 }
               }
+              const currData = data[subsection.id]
               return {
                 ...subsection,
-                content: data[subsection.id],
+                content: currData,
               }
             }),
           }

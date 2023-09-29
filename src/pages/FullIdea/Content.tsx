@@ -1,11 +1,11 @@
 import {
   Box,
-  Container,
   Heading,
   Icon,
   IconButton,
   Image,
   Stack,
+  Text,
   Tooltip,
   useColorMode,
 } from '@chakra-ui/react'
@@ -60,7 +60,7 @@ const Content = ({ sections, ideaId, imageUrl, ideaUserId }: ContentProps) => {
 
   return (
     <Stack
-      position={"relative"}
+      position={'relative'}
       p={5}
       direction={'column'}
       h={'full'}
@@ -81,34 +81,46 @@ const Content = ({ sections, ideaId, imageUrl, ideaUserId }: ContentProps) => {
           }.png&text=Idea+removed+or+does+not+exist`}
           fallbackStrategy="onError"
         />
-        {ideaUserId === user.uid && <Tooltip label={"Regenerate Image"}>
-          <IconButton
-            aria-label="regenerate image"
-            position="relative"
-            bottom={"50px"}
-            left={5}
-            icon={<Icon as={FiRefreshCcw} />}
-            isRound={true}
-            colorScheme={`${theme}`}
-            onClick={handleRegenerateClick}
-          >
-            Regenerate
-          </IconButton>
-        </Tooltip>}
+        {ideaUserId === user.uid && (
+          <Tooltip label={'Regenerate Image'}>
+            <IconButton
+              aria-label="regenerate image"
+              position="relative"
+              bottom={'50px'}
+              left={5}
+              icon={<Icon as={FiRefreshCcw} />}
+              isRound={true}
+              colorScheme={`${theme}`}
+              onClick={handleRegenerateClick}
+            >
+              Regenerate
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
       {sections.map(section => {
         return (
           <>
-            <Heading key={section.id} id={section.id} size={'lg'} mb={2}>
+            <Heading key={section.id} id={section.id} size={'xl'} mb={2}>
               {section.title}
             </Heading>
             {section.sections.map(s => {
               return (
                 <>
-                  <Heading key={`heading-${s.id}`} id={s.id} size={'md'} mb={1}>
+                  <br />
+                  <Heading key={`heading-${s.id}`} id={s.id} size={'lg'} mb={1}>
                     {s.title}
                   </Heading>
-                  <Container key={`content-${s.id}`}>{s.content}</Container>
+                  <br />
+                  <Text
+                    size={'lg'}
+                    key={`content-${s.id}`}
+                    whiteSpace="pre-line"
+                    my={2}
+                  >
+                    {s.content}
+                  </Text>{' '}
+                  <br />
                 </>
               )
             })}
